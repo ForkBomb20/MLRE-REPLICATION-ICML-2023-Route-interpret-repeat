@@ -1,0 +1,87 @@
+{
+  "cub_ResNet101": {
+    "MoIE_paths": {
+      "iter1": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_64.pth.tar"
+      },
+      "iter2": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "cov_0.2_lr_0.01",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_188.pth.tar"
+      },
+      "iter3": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "cov_0.2_lr_0.01",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_110.pth.tar"
+      },
+      "iter4": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "cov_0.2_lr_0.01",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_257.pth.tar"
+      },
+      "iter5": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "cov_0.2_lr_0.01",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_345.pth.tar"
+      },
+      "iter6": {
+        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "prev_path": "cov_0.2_lr_0.01",
+        "output": "g_outputs",
+        "explainer_path": "explainer",
+        "checkpoint_g": "model_g_best_model_epoch_87.pth.tar"
+      }
+    },
+    "t": {
+      "checkpoint_t_path": "lr_0.001_epochs_95/lr_0.001_epochs_95_ResNet101_layer4_adaptive_sgd_BCE",
+      "checkpoint_file": "best_model_epoch_62.pth.tar"
+    },
+    "bb": {
+      "root_bb": "lr_0.001_epochs_95",
+      "checkpoint_bb": "best_model_epoch_63.pth.tar",
+      "smoothing_value": 0,
+      "img_size": 448,
+      "layer": "layer4"
+    },
+    "files": {
+      "test_tensor_alpha": "test_tensor_alpha.pt",
+      "test_tensor_alpha_norm": "test_tensor_alpha_norm.pt",
+      "test_tensor_concept_mask": "test_tensor_alpha.pt",
+      "test_tensor_conceptizator_concepts": "test_tensor_conceptizator_concepts.pt",
+      "test_tensor_concepts": "test_tensor_concepts.pt",
+      "test_tensor_preds": "test_tensor_preds.pt",
+      "test_tensor_features": "test_tensor_features.pt",
+      "test_tensor_y": "test_tensor_y.pt",
+      "test_tensor_attributes": "test_tensor_attributes.pt",
+      "val_tensor_alpha": "test_tensor_alpha.pt",
+      "val_tensor_alpha_norm": "test_tensor_alpha_norm.pt",
+      "val_tensor_concept_mask": "test_tensor_alpha.pt",
+      "val_tensor_conceptizator_concepts": "val_tensor_conceptizator_concepts.pt",
+      "val_tensor_concepts": "val_tensor_concepts.pt",
+      "val_tensor_preds": "val_tensor_preds.pt",
+      "val_tensor_y": "val_tensor_y.pt",
+      "val_tensor_features": "val_tensor_features.pt",
+      "train_tensor_alpha": "test_tensor_alpha.pt",
+      "train_tensor_alpha_norm": "test_tensor_alpha_norm.pt",
+      "train_tensor_concept_mask": "test_tensor_alpha.pt",
+      "train_tensor_conceptizator_concepts": "train_tensor_conceptizator_concepts.pt",
+      "train_tensor_concepts": "train_tensor_concepts.pt",
+      "train_tensor_preds": "train_tensor_preds.pt",
+      "train_tensor_y": "train_tensor_y.pt",
+      "train_tensor_features": "train_tensor_features.pt",
+       "train_tensor_attributes": "train_tensor_attributes.pt"
+    }
+  }
+}
