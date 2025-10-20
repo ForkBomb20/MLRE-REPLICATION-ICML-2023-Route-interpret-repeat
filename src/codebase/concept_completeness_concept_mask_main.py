@@ -55,7 +55,7 @@ def create_dataset_for_completeness_moIE(args):
         print(f"iteration: {_iter} || topK: {args.topK}")
 
         # Get test data
-        if args.dataset == "cub" or args.dataset == "awa2" or args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
+        if args.dataset == "cub":
             (
                 tensor_alpha, tensor_alpha_norm, tensor_concept_mask, test_tensor_conceptizator_concepts,
                 test_tensor_concepts, test_tensor_preds, test_tensor_y,
@@ -92,8 +92,7 @@ def create_dataset_for_completeness_moIE(args):
             print(f"Val mask size: {val_mask_alpha.size()}")
             torch.save(val_mask_alpha, os.path.join(val_full_output_path, f"val_mask_alpha_topK_{args.topK}.pt"))
         # Get train data
-        if args.dataset == "cub" or args.dataset == "HAM10k" or \
-                args.dataset == "SIIM-ISIC" or args.dataset == "awa2":
+        if args.dataset == "cub":
             print("Getting train masks")
             (
                 tensor_alpha, tensor_alpha_norm, tensor_concept_mask, train_tensor_conceptizator_concepts,

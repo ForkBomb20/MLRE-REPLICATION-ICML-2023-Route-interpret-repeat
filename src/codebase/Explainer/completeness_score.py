@@ -17,9 +17,7 @@ from Explainer.models.residual import Residual
 from Explainer.utils_explainer import get_normalized_vc, ConceptBank, get_data_loaders, \
     get_data_loaders_per_iter_completeness, get_data_tuple, get_data_loaders_per_iter_completeness_baseline
 from Logger.logger_cubs import Logger_CUBS
-from dataset.dataset_awa2 import Dataset_awa2_for_explainer
 from dataset.dataset_cubs import Dataset_cub_for_explainer
-from dataset.dataset_ham10k import load_ham_data, load_isic
 from dataset.utils_dataset import get_dataset_with_image_and_attributes
 
 
@@ -280,45 +278,6 @@ def do_test_cal_completeness_ham_isic(
     print(os.path.join(g_output_path, f"out_put_predict_bb.pt"))
 
 
-def do_cal_completeness_ham_isic(
-        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader,
-        per_iter_completeness=False
-):
-    concept_path = os.path.join(args.output, args.dataset, "t", args.arch)
-    bb_model, bb_model_bottom, bb_model_top = None, None, None
-
-    if args.dataset == "HAM10k":
-        bb_model, bb_model_bottom, bb_model_top = get_model(args.bb_dir, args.model_name)
-    elif args.dataset == "SIIM-ISIC":
-        bb_model, bb_model_bottom, bb_model_top = get_BB_model_isic(args.bb_dir, args.model_name, args.dataset)
-
-    print("BB is loaded successfully")
-    concepts_dict = pickle.load(
-        open(os.path.join(concept_path, args.concept_file_name), "rb")
-    )
-    cavs = []
-    for key in concepts_dict.keys():
-        cavs.append(concepts_dict[key][0][0].tolist())
-    cavs = np.array(cavs)
-    print(f"cavs size: {cavs.shape}")
-    concept_bank = ConceptBank(concepts_dict, device)
-    residual = copy.deepcopy(bb_model_top)
-    residual.eval()
-
-    g = G(args.pretrained, args.arch, dataset=args.dataset, hidden_nodes=args.hidden_nodes).to(device)
-    optimizer = torch.optim.Adam(g.parameters(), lr=0.01)
-    criterion = torch.nn.CrossEntropyLoss()
-    logger = Logger_CUBS(
-        1, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader, len(args.labels), device
-    )
-    run_id = "g_train"
-    fit_g_skin(
-        args.epochs, bb_model, bb_model_bottom, residual, cavs, g, optimizer, train_loader, val_loader, criterion,
-        logger,
-        args.arch, args.dataset, run_id, device, per_iter_completeness
-    )
-
-
 def fit_g_skin(
         epochs,
         bb_model,
@@ -465,9 +424,6 @@ def do_test_cal_completeness_cub_awa2(
     if args.arch == "ResNet50" or args.arch == "ResNet101" or args.arch == "ResNet152":
         residual.fc.weight = copy.deepcopy(bb.base_model.fc.weight)
         residual.fc.bias = copy.deepcopy(bb.base_model.fc.bias)
-    elif args.arch == "ViT-B_16":
-        residual.fc.weight = copy.deepcopy(bb.part_head.weight)
-        residual.fc.bias = copy.deepcopy(bb.part_head.bias)
     residual.eval()
 
     out_put_GT = torch.FloatTensor().cuda()
@@ -571,9 +527,6 @@ def do_cal_completeness_cub_awa2(
     if args.arch == "ResNet50" or args.arch == "ResNet101" or args.arch == "ResNet152":
         residual.fc.weight = copy.deepcopy(bb.base_model.fc.weight)
         residual.fc.bias = copy.deepcopy(bb.base_model.fc.bias)
-    elif args.arch == "ViT-B_16":
-        residual.fc.weight = copy.deepcopy(bb.part_head.weight)
-        residual.fc.bias = copy.deepcopy(bb.part_head.bias)
     elif args.arch == "densenet121":
         residual.fc.weight = copy.deepcopy(bb.fc1.weight)
         residual.fc.bias = copy.deepcopy(bb.fc1.bias)
@@ -740,9 +693,6 @@ def get_phi_x(image, bb, arch, layer):
         # feature_x = get_flattened_x(bb.feature_store[layer], flattening_type)
         feature_x = bb.feature_store[layer]
         return bb_logits, feature_x
-    elif arch == "ViT-B_16":
-        logits, tokens = bb(image)
-        return logits, tokens[:, 0]
     if arch == "densenet121":
         return None, image.squeeze(dim=1)
 
@@ -766,50 +716,3 @@ def get_test_loaders(args):
         )
         test_loader = DataLoader(val_dataset, batch_size=args.bs, shuffle=False, num_workers=4, pin_memory=True)
         return test_loader
-
-    elif args.dataset == 'awa2':
-        dataset_path = os.path.join(args.output, args.dataset, "t", args.dataset_folder_concepts, "dataset_g")
-        transforms = utils.get_train_val_transforms(args.dataset, args.img_size, args.arch)
-        test_transform = transforms["val_transform"]
-        test_dataset = Dataset_awa2_for_explainer(
-            dataset_path, "test_proba_concepts.pt", "test_class_labels.pt", "test_attributes.pt",
-            "test_image_names.pkl",
-            test_transform
-        )
-        test_loader = DataLoader(test_dataset, batch_size=args.bs, shuffle=False, num_workers=4, pin_memory=True)
-        return test_loader
-
-    elif args.dataset == 'HAM10k':
-        from torchvision import transforms
-        normalize = transforms.Normalize(
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
-        )
-        transform = transforms.Compose(
-            [
-                transforms.Resize(299),
-                transforms.CenterCrop(299),
-                transforms.ToTensor(),
-                normalize
-            ]
-        )
-        train_loader, val_loader, idx_to_class = load_ham_data(args, transform, args.class_to_idx)
-        print(f"Train dataset size: {len(train_loader.dataset)}")
-        print(f"Val dataset size: {len(val_loader.dataset)}")
-        return val_loader
-    elif args.dataset == "SIIM-ISIC":
-        from torchvision import transforms
-        normalize = transforms.Normalize(
-            mean=[0.485, 0.456, 0.406],
-            std=[0.229, 0.224, 0.225]
-        )
-        transform = transforms.Compose(
-            [
-                transforms.Resize(299),
-                transforms.CenterCrop(299),
-                transforms.ToTensor(),
-                normalize
-            ]
-        )
-        train_loader, val_loader, idx_to_class = load_isic(args, transform, mode="train")
-        return val_loader

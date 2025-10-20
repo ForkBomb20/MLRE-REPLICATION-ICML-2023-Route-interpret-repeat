@@ -12,12 +12,8 @@ from sklearn.metrics import roc_auc_score, average_precision_score
 from torch.optim import lr_scheduler
 from torchvision import transforms
 
-from BB.models.BB_DenseNet121 import DenseNet121
 from BB.models.BB_ResNet import ResNet
 from BB.models.BB_ResNet50_metanorm import BB_ResNet50_metanorm
-from BB.models.VIT import CONFIGS, VisionTransformer
-from BB.models.VIT_p import VisionTransformer_projected
-from scheduler import WarmupCosineSchedule, WarmupLinearSchedule
 
 
 def create_lr_scheduler(optimizer, args):
@@ -163,18 +159,6 @@ def dump_in_pickle(output_path, file_name, stats_to_dump):
 def get_model(model_arch, dataset, pretrained, n_classes, layer=None):
     if model_arch == "ResNet101" or model_arch == "ResNet50":
         return ResNet(dataset=dataset, pre_trained=pretrained, n_class=n_classes, model_choice=model_arch, layer=layer)
-    elif model_arch == "ViT-B_16":
-        config = CONFIGS[model_arch]
-        device = get_device()
-        bb = VisionTransformer(
-            config, 448, zero_head=True, num_classes=200, smoothing_value=0
-        ).to(device)
-        bb.load_state_dict(
-            torch.load(
-                os.path.join(args.checkpoints, args.dataset, "BB", args.root_bb, args.arch, args.checkpoint_bb),
-            )["model"]
-        )
-        return bb
 
 
 def get_model_explainer(args, device):
@@ -188,28 +172,6 @@ def get_model_explainer(args, device):
         bb.load_state_dict(
             torch.load(chkpt)
         )
-        return bb
-    elif args.arch == "ViT-B_16":
-        config = CONFIGS[args.arch]
-        chkpt = os.path.join(args.checkpoints, args.dataset, 'BB', args.root_bb, args.arch, args.checkpoint_bb)
-        print(f"==>> Loading BB from : {chkpt}")
-        bb = VisionTransformer(
-            config, args.img_size, zero_head=True, num_classes=len(args.labels), smoothing_value=args.smoothing_value
-        ).to(device)
-        bb.load_state_dict(torch.load(chkpt)["model"])
-        return bb
-    elif args.arch == "ViT-B_16_projected":
-        config = CONFIGS["ViT-B_16"]
-        # chkpt = os.path.join(args.checkpoints, args.dataset, 'BB', args.root_bb, args.arch, args.checkpoint_bb)
-        chkpt = os.path.join(
-            "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/spurious-cub-specific-classes/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.95_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1/explainer_projected",
-            "VIT_CUBS_8000_checkpoint.bin"
-        )
-        print(f"==>> Loading projected BB from : {chkpt}")
-        bb = VisionTransformer_projected(
-            config, args.img_size, zero_head=True, num_classes=len(args.labels), smoothing_value=args.smoothing_value
-        ).to(device)
-        bb.load_state_dict(torch.load(chkpt)["model"])
         return bb
     elif (args.arch == "ResNet50" or args.arch == "ResNet101" or args.arch == "ResNet152") and args.projected == "y":
         dataset_path = os.path.join(args.output, args.dataset, args.dataset_folder_concepts)
@@ -230,19 +192,10 @@ def get_model_explainer(args, device):
         bb_projected.load_state_dict(torch.load(chkpt))
         print(f"==>> Loading projected BB from : {chkpt}")
         return bb_projected
-    elif args.arch == "densenet121":
-        args.N_labels = len(args.labels)
-        model_bb = DenseNet121(args, layer=args.layer)
-        chk_pt_path_bb = os.path.join(
-            args.checkpoints, args.dataset, "BB", args.root_bb, args.arch, args.disease_folder
-        )
-        model_chk_pt = torch.load(os.path.join(chk_pt_path_bb, args.checkpoint_bb))
-        model_bb.load_state_dict(model_chk_pt['state_dict'])
-        return model_bb
 
 
 def get_criterion(dataset):
-    if dataset == "cub" or dataset == "awa2":
+    if dataset == "cub":
         return torch.nn.CrossEntropyLoss()
 
 
@@ -254,24 +207,11 @@ def get_optim(dataset, net, params):
             momentum=params["momentum"],
             weight_decay=params["weight_decay"]
         )
-    elif dataset == "awa2":
-        return torch.optim.Adam(
-            filter(lambda p: p.requires_grad, net.parameters()),
-            lr=params["lr"], weight_decay=params["weight_decay"]
-        )
 
 
 def get_scheduler(solver, args):
     if args.arch == "ResNet50" or args.arch == "ResNet101" or args.arch == "Inception_V3":
         return torch.optim.lr_scheduler.StepLR(solver, step_size=30, gamma=0.1)
-    elif args.arch == "ViT-B_16":
-        t_total = args.num_steps
-        if args.decay_type == "cosine":
-            scheduler = WarmupCosineSchedule(solver, warmup_steps=args.warmup_steps, t_total=t_total)
-        else:
-            scheduler = WarmupLinearSchedule(solver, warmup_steps=args.warmup_steps, t_total=t_total)
-
-        return scheduler
 
 
 def get_train_val_transforms(dataset, img_size, arch):
@@ -301,119 +241,10 @@ def get_train_val_transforms(dataset, img_size, arch):
                 transforms.ToTensor()
             ])
         }
-    elif dataset == "cub" and (arch == "ViT-B_16" or arch == "ViT-B_16_projected"):
-        return {
-            "train_transform": transforms.Compose([
-                transforms.Resize((600, 600), Image.BILINEAR),
-                transforms.RandomCrop((448, 448)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    [0.485, 0.456, 0.406],
-                    [0.229, 0.224, 0.225]
-                )
-            ]),
-            "val_transform": transforms.Compose([
-                transforms.Resize((600, 600), Image.BILINEAR),
-                transforms.CenterCrop((448, 448)),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    [0.485, 0.456, 0.406],
-                    [0.229, 0.224, 0.225]
-                )
-            ]),
-            "save_transform": transforms.Compose([
-                transforms.Resize(int(img_size / 0.875)),
-                transforms.CenterCrop(img_size),
-                transforms.ToTensor()
-            ])
-        }
-    elif dataset == "awa2" and (arch == "ResNet50" or arch == "ResNet101"):
-        return {
-            "train_transform": transforms.Compose(
-                [
-                    transforms.RandomResizedCrop(224),
-                    transforms.RandomHorizontalFlip(),
-                    transforms.ToTensor(),
-                    transforms.Normalize(
-                        mean=(0.485, 0.456, 0.406),
-                        std=(0.229, 0.224, 0.225)
-                    )
-                    # transforms.ToPILImage(),
-                    # transforms.RandomResizedCrop(224),
-                    # transforms.RandomHorizontalFlip(),
-                    # transforms.ToTensor(),
-                    # transforms.Normalize(mean=(0.485, 0.456, 0.406),
-                    #                      std=(0.229, 0.224, 0.225))
-                ]),
-            "val_transform": transforms.Compose([
-                transforms.Resize(224),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    mean=(0.485, 0.456, 0.406),
-                    std=(0.229, 0.224, 0.225)
-                )
-            ]),
-            "save_transform": transforms.Compose([
-                transforms.ToPILImage(),
-                transforms.Resize(224),
-                transforms.CenterCrop(224),
-                transforms.ToTensor(),
-            ])
-        }
-
-    elif dataset == "awa2" and (arch == "ViT-B_16" or arch == "ViT-B_16_projected"):
-        return {
-            "train_transform": transforms.Compose([
-                transforms.Resize((600, 600), Image.BILINEAR),
-                transforms.RandomCrop((448, 448)),
-                transforms.RandomHorizontalFlip(),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    [0.485, 0.456, 0.406],
-                    [0.229, 0.224, 0.225]
-                )
-            ]),
-            "val_transform": transforms.Compose([
-                transforms.Resize((600, 600), Image.BILINEAR),
-                transforms.CenterCrop((448, 448)),
-                transforms.ToTensor(),
-                transforms.Normalize(
-                    [0.485, 0.456, 0.406],
-                    [0.229, 0.224, 0.225]
-                )
-            ]),
-            "save_transform": transforms.Compose([
-                transforms.Resize(int(img_size / 0.875)),
-                transforms.CenterCrop(img_size),
-                transforms.ToTensor()
-            ])
-        }
-    elif dataset == "mnist":
-        transform = transforms.Compose([
-            transforms.Resize(size=224),
-            transforms.CenterCrop(size=224),
-            transforms.ToTensor(),
-            transforms.Normalize(
-                mean=[0.485, 0.456, 0.406],
-                std=[0.229, 0.224, 0.225])
-        ])
-        return transform
 
 
 def get_test_transforms(dataset, img_size, arch):
-    if dataset == "cub" and (arch == "ViT-B_16" or arch == "ViT-B_16_projected"):
-        return transforms.Compose([
-            transforms.Resize((600, 600), Image.BILINEAR),
-            transforms.CenterCrop((448, 448)),
-            transforms.ToTensor(),
-            transforms.Normalize(
-                [0.485, 0.456, 0.406],
-                [0.229, 0.224, 0.225]
-            )
-        ])
-    elif dataset == "cub" and (arch == "ResNet50" or arch == "ResNet101"):
+    if dataset == "cub" and (arch == "ResNet50" or arch == "ResNet101"):
         return transforms.Compose([
             transforms.Resize(int(img_size / 0.875)),
             transforms.CenterCrop(img_size),
@@ -433,19 +264,11 @@ def get_image_label(args, data_tuple, device):
             data, target, _ = data_tuple
         data, target = data.to(device), target.to(torch.long).to(device)
         return data, target
-    elif args.dataset == "mnist":
-        data, target = data_tuple
-        data, target = data.to(device), target.to(torch.float32).to(device)
-        target = target.reshape((target.shape[0], 1))
-        return data, target
 
 
 def get_image_attributes(data_tuple, spurious_waterbird_landbird, dataset_name):
     if dataset_name == "cub":
         data, _, attribute = data_tuple
-        return data, attribute
-    elif dataset_name == "mnist":
-        data, attribute = data_tuple
         return data, attribute
 
 
@@ -504,8 +327,3 @@ def replace_names(explanation: str, concept_names) -> str:
         explanation = explanation.replace(k, v)
 
     return explanation
-
-
-class Bunch(object):
-    def __init__(self, adict):
-        self.__dict__.update(adict)

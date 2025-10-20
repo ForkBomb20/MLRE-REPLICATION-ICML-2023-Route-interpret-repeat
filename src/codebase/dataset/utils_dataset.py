@@ -9,7 +9,7 @@ from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 import utils
-from dataset.dataset_awa2 import AnimalDataset
+
 from dataset.dataset_cubs import Dataset_cub, Waterbird_LandBird_Final_Dataset, DRODatasetFinal, \
     Dataset_cub_for_explainer, Dataset_cub_waterbird_landbird
 from utils import get_train_val_transforms
@@ -279,16 +279,6 @@ def get_dataloader(
         )
 
         return train_loader, val_loader
-
-    elif dataset_name == "awa2":
-        transforms = utils.get_train_val_transforms(dataset_name, args.img_size, args.arch)
-        train_transform = transforms["train_transform"]
-        val_transform = transforms["val_transform"]
-
-        dataset = AnimalDataset(args)
-        train_indices, val_indices = train_test_split(
-            list(range(len(dataset.target_index))), test_size=0.2, stratify=dataset.target_index
-        )
 
 
 def get_test_dataloader(

@@ -112,6 +112,16 @@ class ConfounderDataset(Dataset):
             subsets[split] = Subset(self, indices)
         return subsets
 
+    def group_str(self, group_idx):
+        y = group_idx // (self.n_groups / self.n_classes)
+        c = group_idx % (self.n_groups // self.n_classes)
+
+        group_name = f'{self.target_name} = {int(y)}'
+        bin_str = format(int(c), f'0{self.n_confounders}b')[::-1]
+        for attr_idx, attr_name in enumerate(self.confounder_names):
+            group_name += f', {attr_name} = {bin_str[attr_idx]}'
+        return group_name
+
 
 class Waterbird_LandBird_Final_Dataset(ConfounderDataset):
     """

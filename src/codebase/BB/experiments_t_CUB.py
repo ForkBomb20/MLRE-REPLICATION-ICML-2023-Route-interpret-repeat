@@ -15,8 +15,6 @@ import jupyter_notebook.stats_t as stats
 import utils
 from BB.models.BB_ResNet import ResNet
 from BB.models.BB_ResNet50_metanorm import BB_ResNet50_metanorm
-from BB.models.VIT import VisionTransformer, CONFIGS
-from BB.models.VIT_p import VisionTransformer_projected
 from BB.models.focal_loss import FocalLoss
 from BB.models.t import Logistic_Regression_t
 from Logger.logger_cubs import Logger_CUBS
@@ -609,30 +607,6 @@ def get_bb(args, chk_pt_path_bb, device):
         print(f"Projected CNN BB is loaded from {chkpt}")
         bb.load_state_dict(torch.load(chkpt))
         return bb
-    elif args.arch == "ViT-B_16":
-        config = CONFIGS[args.arch]
-        print(f"BB is loaded from {os.path.join(chk_pt_path_bb, args.checkpoint_file)}")
-        bb = VisionTransformer(
-            config, args.img_size, zero_head=True, num_classes=len(args.labels),
-            smoothing_value=args.smoothing_value
-        ).to(device)
-        bb.load_state_dict(torch.load(os.path.join(chk_pt_path_bb, args.checkpoint_file))["model"])
-        return bb
-    elif args.arch == "ViT-B_16_projected":
-        config = CONFIGS["ViT-B_16"]
-        # chkpt = os.path.join(args.checkpoints, args.dataset, 'BB', args.root_bb, args.arch, args.checkpoint_bb)
-        chkpt = os.path.join(
-            "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/spurious-cub-specific-classes/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.95_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1/explainer_projected",
-            "VIT_CUBS_8000_checkpoint.bin"
-        )
-        print(f"==>> Loading projected VIT BB from : {chkpt}")
-        bb = VisionTransformer_projected(
-            config, args.img_size, zero_head=True, num_classes=len(args.labels), smoothing_value=args.smoothing_value,
-            get_phi=True
-        ).to(device)
-        bb.load_state_dict(torch.load(chkpt)["model"])
-        return bb
-
 
 def get_phi_x(image, bb, arch, layer, cfs, projected="n"):
     if (arch == "ResNet50" or arch == "ResNet101" or arch == "ResNet152") and projected == "n":
@@ -643,16 +617,8 @@ def get_phi_x(image, bb, arch, layer, cfs, projected="n"):
     elif (arch == "ResNet50" or arch == "ResNet101" or arch == "ResNet152") and projected == "y":
         feature_x, _ = bb(image, cfs, get_phi=True)
         return feature_x
-    elif arch == "ViT-B_16" and projected == "n":
-        logits, tokens = bb(image)
-        return tokens[:, 0]
-    # elif arch == "ViT-B_16_projected":
-    #     phi_r_x, _ = bb(image, concepts, scale, sigma, device)
-    #     return phi_r_x
 
 
 def get_input_size_t(args, bb):
     if args.arch == "ResNet50" or args.arch == "ResNet101" or args.arch == "ResNet152":
         return 2048
-    elif args.arch == "ViT-B_16" or args.arch == "ViT-B_16_projected":
-        return 768

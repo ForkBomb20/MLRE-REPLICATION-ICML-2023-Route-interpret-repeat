@@ -40,10 +40,6 @@ def config():
 def compute_completeness_score(args, model_type):
     if args.dataset == "cub":
         num_classes = 200
-    elif args.dataset == "awa2":
-        num_classes = 50
-    elif args.dataset == "HAM10k":
-        num_classes = 2
 
     print(f"TopK: {args.topK}")
     args.json_file = os.path.join(args.base_path, "codebase", "Completeness_and_interventions", "paths_MoIE.json")

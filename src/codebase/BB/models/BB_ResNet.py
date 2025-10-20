@@ -22,7 +22,7 @@ class ResNet(nn.Module):
         self.base_model = self._model_choice(pre_trained, model_choice)
         feat_dim = self.base_model.fc.weight.shape[1]
 
-        if dataset == "cub" or dataset == "awa2" or dataset == "mnist":
+        if dataset == "cub":
             self.base_model.avgpool = nn.AdaptiveAvgPool2d((1, 1))
             self.base_model.fc = nn.Linear(in_features=feat_dim, out_features=n_class)
             self.base_model.fc.apply(weight_init_kaiming)

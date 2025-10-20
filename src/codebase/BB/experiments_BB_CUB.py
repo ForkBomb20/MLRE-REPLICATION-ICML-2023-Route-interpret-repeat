@@ -13,7 +13,6 @@ from tqdm import tqdm
 import dataset.utils_dataset as utils_dataset
 import utils
 from BB.models.BB_ResNet import ResNet
-from BB.models.VIT import CONFIGS, VisionTransformer
 from Logger.logger_cubs import Logger_CUBS
 
 logger = logging.getLogger(__name__)
@@ -238,12 +237,6 @@ def store_feature_maps(dataloader, layer, device, bb, dataset_name, output_path_
 def get_bb_logits(arch, net, data, sigma_test, attribute, scale, device):
     if arch == "ResNet101" or arch == "ResNet50":
         return net(data)
-    elif arch == "ViT-B_16":
-        return net(data)
-    elif arch == "ViT-B_16_projected":
-        concept = attribute[:, 108: 110]
-        y_hat_bb = net(data, concept, scale, sigma_test, device)
-        return y_hat_bb
 
 
 def validate(args, test_loader, net, dataset, labels, output_path, device, sigma_test=None):
@@ -354,22 +347,6 @@ def get_model(args, device):
             dataset=args.dataset, pre_trained=args.pretrained, n_class=len(args.labels),
             model_choice=args.arch, layer="layer4"
         ).to(device)
-    elif args.arch == "ViT-B_16":
-        _config = CONFIGS[args.arch]
-        _config.split = "non-overlap"
-        _config.slide_step = 12
-        _img_size = args.img_size
-        _smoothing_value = 0.0
-        _num_classes = len(args.labels)
-
-        model = VisionTransformer(
-            _config, _img_size, zero_head=True, num_classes=_num_classes, smoothing_value=_smoothing_value
-        )
-
-        pre_trained = "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/pretrained_VIT/ViT-B_16.npz"
-        checkpoint = np.load(pre_trained)
-        model.load_from(checkpoint)
-        return model.to(device)
 
 
 class AverageMeter(object):
