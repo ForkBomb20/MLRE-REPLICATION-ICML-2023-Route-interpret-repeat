@@ -10,7 +10,6 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 
 import utils
-from BB.models.BB_Inception_V3 import get_model, get_BB_model_isic
 from BB.models.t import Logistic_Regression_t
 from Explainer.models.G import G
 from Explainer.models.residual import Residual
@@ -46,16 +45,10 @@ def cal_completeness_score_per_iter(args):
     print(g_output_path)
     print(g_tb_logs_path)
     print("############# Paths ############# ")
-    if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
-        do_cal_completeness_ham_isic(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader,
-            per_iter_completeness=True
-        )
-    else:
-        do_cal_completeness_cub_awa2(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader,
-            per_iter_completeness=True
-        )
+    do_cal_completeness_cub_awa2(
+        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader,
+        per_iter_completeness=True
+    )
 
 def cal_completeness_stats_per_iter(args):
     random.seed(args.seed)
@@ -82,18 +75,12 @@ def cal_completeness_stats_per_iter(args):
     print(g_output_path)
     print(g_tb_logs_path)
     print("############# Paths ############# ")
-    if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
-        do_test_cal_completeness_ham_isic(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader,
-            args.g_checkpoint,
-            per_iter_completeness=True
-        )
-    else:
-        do_test_cal_completeness_cub_awa2(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader,
-            args.g_checkpoint,
-            per_iter_completeness=True
-        )
+
+    do_test_cal_completeness_cub_awa2(
+        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader,
+        args.g_checkpoint,
+        per_iter_completeness=True
+    )
 
 
 def cal_completeness_stats(args):
@@ -124,14 +111,9 @@ def cal_completeness_stats(args):
     print(g_output_path)
     print(g_tb_logs_path)
     print("############# Paths ############# ")
-    if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
-        do_test_cal_completeness_ham_isic(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader, args.g_checkpoint
-        )
-    else:
-        do_test_cal_completeness_cub_awa2(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader, args.g_checkpoint
-        )
+    do_test_cal_completeness_cub_awa2(
+        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader, args.g_checkpoint
+    )
 
 
 def cal_completeness_score(args):
@@ -164,118 +146,9 @@ def cal_completeness_score(args):
     print(g_tb_logs_path)
     print("############# Paths ############# ")
 
-    if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
-        do_cal_completeness_ham_isic(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader
-        )
-    else:
-        do_cal_completeness_cub_awa2(
-            args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader
-        )
-
-
-def do_test_cal_completeness_ham_isic(
-        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, test_loader, checkpoint,
-        per_iter_completeness=True
-):
-    concept_path = os.path.join(args.output, args.dataset, "t", args.arch)
-    bb_model, bb_model_bottom, bb_model_top = None, None, None
-
-    if args.dataset == "HAM10k":
-        bb_model, bb_model_bottom, bb_model_top = get_model(args.bb_dir, args.model_name)
-    elif args.dataset == "SIIM-ISIC":
-        bb_model, bb_model_bottom, bb_model_top = get_BB_model_isic(args.bb_dir, args.model_name, args.dataset)
-
-    print("BB is loaded successfully")
-    concepts_dict = pickle.load(
-        open(os.path.join(concept_path, args.concept_file_name), "rb")
+    do_cal_completeness_cub_awa2(
+        args, device, g_chk_pt_path, g_tb_logs_path, g_output_path, train_loader, val_loader
     )
-    cavs = []
-    for key in concepts_dict.keys():
-        cavs.append(concepts_dict[key][0][0].tolist())
-    cavs = np.array(cavs)
-    print(f"cavs size: {cavs.shape}")
-    concept_bank = ConceptBank(concepts_dict, device)
-    residual = copy.deepcopy(bb_model_top)
-    residual.eval()
-
-    g = G(args.pretrained, args.arch, dataset=args.dataset, hidden_nodes=args.hidden_nodes).to(device)
-    g.load_state_dict(torch.load(os.path.join(g_chk_pt_path, checkpoint)))
-    g.eval()
-
-    out_put_GT = torch.FloatTensor().cuda()
-    out_put_predict_bb = torch.FloatTensor().cuda()
-    out_put_predict_completeness = torch.FloatTensor().cuda()
-    torch_concept_vector = torch.from_numpy(cavs).to(device, dtype=torch.float32)
-    with torch.no_grad():
-        with tqdm(total=len(test_loader)) as t:
-            for batch_id, data_tuple in enumerate(test_loader):
-                if not per_iter_completeness:
-                    # for all concepts
-                    val_images, val_y = data_tuple
-                    val_images = val_images.to(device)
-                    val_y = val_y.to(device)
-                    val_mask = None
-                else:
-                    # for selected concepts by experts
-                    val_images, val_y, val_mask = data_tuple
-                    val_images = val_images.to(device)
-                    val_y = val_y.to(device)
-                    val_mask = val_mask.to(device)
-
-                with torch.no_grad():
-                    bb_logits = bb_model(val_images)
-                    feature_x = bb_model_bottom(val_images)
-                norm_vc = get_normalized_vc(
-                    feature_x,
-                    torch_concept_vector,
-                    th=0,
-                    val_after_th=0,
-                    cav_flattening_type="flattened",
-                    per_iter_completeness=per_iter_completeness,
-                    train_mask=val_mask
-                )
-                concept_to_act = g(norm_vc)
-                completeness_logits = residual(concept_to_act)[0]
-
-                out_put_predict_bb = torch.cat((out_put_predict_bb, bb_logits), dim=0)
-                out_put_predict_completeness = torch.cat((out_put_predict_completeness, completeness_logits), dim=0)
-                out_put_GT = torch.cat((out_put_GT, val_y), dim=0)
-                t.set_postfix(iteration=f"{batch_id}")
-                t.update()
-
-    out_put_GT_np = out_put_GT.cpu().numpy()
-    out_put_predict_bb_np = out_put_predict_bb.cpu().numpy()
-    out_put_predict_completeness_np = out_put_predict_completeness.cpu().numpy()
-
-    y_hat_bb = out_put_predict_bb.cpu().argmax(dim=1).numpy()
-    y_hat_completeness_bb = out_put_predict_completeness.cpu().argmax(dim=1).numpy()
-    proba_bb = torch.nn.Softmax(dim=1)(out_put_predict_bb)[:, 1]
-    proba_completeness = torch.nn.Softmax(dim=1)(out_put_predict_completeness)[:, 1]
-
-    acc_bb = utils.cal_accuracy(out_put_GT_np, y_hat_bb)
-    val_auroc_bb, val_aurpc_bb = utils.compute_AUC(out_put_GT, pred=proba_bb)
-
-    acc_completeness = utils.cal_accuracy(out_put_GT_np, y_hat_completeness_bb)
-    val_auroc_completeness, val_aurpc_completeness = utils.compute_AUC(out_put_GT, pred=proba_completeness)
-    completeness_score_acc = (acc_completeness - 0.5) / (acc_bb - 0.5)
-    completeness_score_auroc = (val_auroc_completeness) / (val_auroc_bb)
-
-    print(f"Accuracy of the bb: {acc_bb * 100} (%)")
-    print(f"Accuracy using the completeness: {acc_completeness * 100} (%)")
-    print(f"Completeness_score based on accuracy: {completeness_score_acc}")
-    print(f"Auroc of the bb: {val_auroc_bb}")
-    print(f"Auroc using the completeness: {val_auroc_completeness}")
-    print(f"Completeness_score based on auroc: {completeness_score_auroc}")
-
-    np.save(os.path.join(g_output_path, f"out_put_GT_prune.npy"), out_put_GT_np)
-    torch.save(out_put_predict_bb.cpu(), os.path.join(g_output_path, f"out_put_predict_logits_bb.pt"))
-    torch.save(
-        out_put_predict_completeness.cpu(), os.path.join(g_output_path, f"out_put_predict_logits_completeness.pt")
-    )
-    torch.save(y_hat_bb, os.path.join(g_output_path, f"out_put_predict_bb.pt"))
-
-    print(os.path.join(g_output_path, f"out_put_predict_bb.pt"))
 
 
 def fit_g_skin(

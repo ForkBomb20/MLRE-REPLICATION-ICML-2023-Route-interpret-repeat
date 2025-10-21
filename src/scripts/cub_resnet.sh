@@ -4,41 +4,41 @@ pwd; hostname; date
 CURRENT=`date +"%Y-%m-%d_%T"`
 echo $CURRENT
 
-slurm_output_bb_train=cub_resnet_bb_train_$CURRENT.out
-slurm_output_bb_test=cub_resnet_bb_test_$CURRENT.out
-slurm_output_t_train=cub_resnet_t_train_$CURRENT.out
-slurm_output_t_test=cub_resnet_t_test_$CURRENT.out
+slurm_output_bb_train=./out/cub_resnet_bb_train_$CURRENT.out
+slurm_output_bb_test=./out/cub_resnet_bb_test_$CURRENT.out
+slurm_output_t_train=./out/cub_resnet_t_train_$CURRENT.out
+slurm_output_t_test=./out/cub_resnet_t_test_$CURRENT.out
 
-slurm_output_iter1_g_train=cub_resnet_iter1_g_train_$CURRENT.out
-slurm_output_iter1_g_test=cub_resnet_iter1_g_test_$CURRENT.out
-slurm_output_iter1_residual_train=cub_resnet_iter1_residual_train_$CURRENT.out
+slurm_output_iter1_g_train=./out/cub_resnet_iter1_g_train_$CURRENT.out
+slurm_output_iter1_g_test=./out/cub_resnet_iter1_g_test_$CURRENT.out
+slurm_output_iter1_residual_train=./out/cub_resnet_iter1_residual_train_$CURRENT.out
 
-slurm_output_iter2_g_train=cub_resnet_iter2_g_train_$CURRENT.out
-slurm_output_iter2_g_test=cub_resnet_iter2_g_test_$CURRENT.out
-slurm_output_iter2_residual_train=cub_resnet_iter2_residual_train_$CURRENT.out
+slurm_output_iter2_g_train=./out/cub_resnet_iter2_g_train_$CURRENT.out
+slurm_output_iter2_g_test=./out/cub_resnet_iter2_g_test_$CURRENT.out
+slurm_output_iter2_residual_train=./out/cub_resnet_iter2_residual_train_$CURRENT.out
 
-slurm_output_iter3_g_train=cub_resnet_iter3_g_train_$CURRENT.out
-slurm_output_iter3_g_test=cub_resnet_iter3_g_test_$CURRENT.out
-slurm_output_iter3_residual_train=cub_resnet_iter3_residual_train_$CURRENT.out
+slurm_output_iter3_g_train=./out/cub_resnet_iter3_g_train_$CURRENT.out
+slurm_output_iter3_g_test=./out/cub_resnet_iter3_g_test_$CURRENT.out
+slurm_output_iter3_residual_train=./out/cub_resnet_iter3_residual_train_$CURRENT.out
 
-slurm_output_iter4_g_train=cub_resnet_iter4_g_train_$CURRENT.out
-slurm_output_iter4_g_test=cub_resnet_iter4_g_test_$CURRENT.out
-slurm_output_iter4_residual_train=cub_resnet_iter4_residual_train_$CURRENT.out
+slurm_output_iter4_g_train=./out/cub_resnet_iter4_g_train_$CURRENT.out
+slurm_output_iter4_g_test=./out/cub_resnet_iter4_g_test_$CURRENT.out
+slurm_output_iter4_residual_train=./out/cub_resnet_iter4_residual_train_$CURRENT.out
 
-slurm_output_iter5_g_train=cub_resnet_iter5_g_train_$CURRENT.out
-slurm_output_iter5_g_test=cub_resnet_iter5_g_test_$CURRENT.out
-slurm_output_iter5_residual_train=cub_resnet_iter5_residual_train_$CURRENT.out
+slurm_output_iter5_g_train=./out/cub_resnet_iter5_g_train_$CURRENT.out
+slurm_output_iter5_g_test=./out/cub_resnet_iter5_g_test_$CURRENT.out
+slurm_output_iter5_residual_train=./out/cub_resnet_iter5_residual_train_$CURRENT.out
 
-slurm_output_iter6_g_train=cub_resnet_iter6_g_train_$CURRENT.out
-slurm_output_iter6_g_test=cub_resnet_iter6_g_test_$CURRENT.out
-slurm_output_iter6_residual_train=cub_resnet_iter6_residual_train_$CURRENT.out
-slurm_output_iter6_residual_test=cub_resnet_iter6_residual_test_$CURRENT.out
+slurm_output_iter6_g_train=./out/cub_resnet_iter6_g_train_$CURRENT.out
+slurm_output_iter6_g_test=./out/cub_resnet_iter6_g_test_$CURRENT.out
+slurm_output_iter6_residual_train=./out/cub_resnet_iter6_residual_train_$CURRENT.out
+slurm_output_iter6_residual_test=./out/cub_resnet_iter6_residual_test_$CURRENT.out
 
-slurm_explanations=cub_resnet_explanations_$CURRENT.out
+slurm_explanations=./out/cub_resnet_explanations_$CURRENT.out
 
 echo "CUB-200 ResNet101"
-source path-of-conda/anaconda3/etc/profile.d/conda.sh
-conda activate python_3_7_rtx_6000
+source ../../env/bin/activate
+which python
 
 # BB model
 # BB Training scripts
