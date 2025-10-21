@@ -257,6 +257,79 @@ def get_glts_for_all(iteration, args, device, g_chk_pt_path):
 
     return glt_list
 
+def get_glts_for_HAM10k(iteration, args, device):
+    glt_list = []
+    for i in range(iteration - 1):
+        # chk_pt_path = os.path.join(args.prev_explainer_chk_pt_folder[i], "explainer", args.checkpoint_model[i])
+        if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
+            chk_pt_path = os.path.join(
+                args.prev_explainer_chk_pt_folder[i], "explainer", "accuracy", args.checkpoint_model[i]
+            )
+        else:
+            chk_pt_path = os.path.join(
+                args.prev_explainer_chk_pt_folder[i], "explainer", args.checkpoint_model[i]
+            )
+        print(f"=======>> glt for iteration {i + 1} is loaded from {chk_pt_path}")
+        glt = Gated_Logic_Net(
+            args.input_size_pi,
+            args.concept_names,
+            args.labels,
+            args.hidden_nodes,
+            args.conceptizator,
+            args.temperature_lens
+        ).to(device)
+        model_chk_pt = torch.load(chk_pt_path)
+        if "state_dict" in model_chk_pt:
+            glt.load_state_dict(model_chk_pt['state_dict'])
+        else:
+            glt.load_state_dict(model_chk_pt)
+        glt.eval()
+        glt_list.append(glt)
+
+    return glt_list
+
+
+def get_glts_for_HAM10k_soft_seed(iteration, args, seed, device):
+    soft_hard_filter = "soft" if args.soft == 'y' else "hard"
+
+    glt_list = []
+    for i in range(iteration - 1):
+        # chk_pt_path = os.path.join(args.prev_explainer_chk_pt_folder[i], "explainer", args.checkpoint_model[i])
+        if args.dataset == "HAM10k" or args.dataset == "SIIM-ISIC":
+            chk_pt_path = os.path.join(
+                args.prev_explainer_chk_pt_folder[i].format(soft_hard_filter=soft_hard_filter, seed=seed),
+                "explainer", "accuracy", args.checkpoint_model[i]
+            ) if args.with_seed.lower() == "y" else os.path.join(
+                args.prev_explainer_chk_pt_folder[i].format(soft_hard_filter=soft_hard_filter),
+                "explainer", "accuracy", args.checkpoint_model[i]
+            )
+        else:
+            chk_pt_path = os.path.join(
+                args.prev_explainer_chk_pt_folder[i].format(soft_hard_filter=soft_hard_filter, seed=seed),
+                "explainer", args.checkpoint_model[i]
+            ) if args.with_seed.lower() == "y" else os.path.join(
+                args.prev_explainer_chk_pt_folder[i].format(soft_hard_filter=soft_hard_filter),
+                "explainer", args.checkpoint_model[i]
+            )
+
+        print(f"=======>> glt for iteration {i + 1} is loaded from {chk_pt_path}")
+        glt = Gated_Logic_Net(
+            args.input_size_pi,
+            args.concept_names,
+            args.labels,
+            args.hidden_nodes,
+            args.conceptizator,
+            args.temperature_lens
+        ).to(device)
+        model_chk_pt = torch.load(chk_pt_path)
+        if "state_dict" in model_chk_pt:
+            glt.load_state_dict(model_chk_pt['state_dict'])
+        else:
+            glt.load_state_dict(model_chk_pt)
+        glt.eval()
+        glt_list.append(glt)
+
+    return glt_list
 
 class EasyDict(dict):
     __getattr__ = dict.get
