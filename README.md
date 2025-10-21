@@ -14,7 +14,7 @@
 8. [Checkpoints](#8-checkpoints)
 
 ## 1. Environment setup
-
+Python version 3.13
 ```bash
 python3 -m venv env
 source env/bin/activate
