@@ -46,11 +46,11 @@ def download_cub(root="CUB_200_2011", force=True):
             attr_name = line.split(" ")[1]
             attribute_names.append(attr_name)
 
-    attribute_per_class = pd.read_csv(os.path.join("attributes", "class_attribute_labels_continuous.txt"), " ",
+    attribute_per_class = pd.read_csv(os.path.join("attributes", "class_attribute_labels_continuous.txt"), sep=" ",
                                       header=None).to_numpy()
     print("Attribute per class loaded")
 
-    classes = pd.read_csv("image_class_labels.txt", " ", header=None).to_numpy()[:, 1]
+    classes = pd.read_csv("image_class_labels.txt", sep=" ", header=None).to_numpy()[:, 1]
     print("Image_classes loaded")
 
     tot_annotations, count = 0, 0
@@ -120,6 +120,7 @@ def download_cub(root="CUB_200_2011", force=True):
             os.rename(img_name, new_name)
     os.system("rm -r images")
     os.remove("images.txt")
+    os.system("mv ../CUB_200_2011 ../data")
     print("Images sorted and renamed")
     print("Dataset configured correctly")
 

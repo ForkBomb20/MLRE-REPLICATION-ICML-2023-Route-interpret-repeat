@@ -32,7 +32,7 @@ Search `--data-root` and `.` variable in this codebase and replace appropriate p
 To get CUB200 metadata and dataset splits, follow [Logic Explained Network](https://github.com/pietrobarbiero/logic_explained_networks/tree/master/data).
 Once json files are downloaded, search for `--json-root` variable in this codebase and replace the appropriate paths.
 
-To preprocess the concepts for CUB200, follow:
+To preprocess the concepts for CUB200, move the **inner** `CUB_200_2011` folder along with `attributes.txt` from the extracted `CUB_200_2011` folder into the root directory of the repository. Also ensure that a `data/` folder exists in the root directory. Then, from the root director, run:
 
 ```python
 python ./src/codebase/data_preprocessing/download_cub.py
