@@ -28,6 +28,7 @@ def get_dataset_with_image_and_attributes(
         f"{mode}_samples_{dataset_name}.json"
     )
 
+    data_samples = []
     if os.path.isfile(data_json):
         with open(os.path.join(data_json), "r") as f:
             json_file = json.load(f)
@@ -54,6 +55,7 @@ def get_dataset_with_image_and_attributes_waterbird_landbird(
         f"{mode}_samples_{dataset_name}.json"
     )
 
+    data_samples = []
     if os.path.isfile(data_json):
         with open(os.path.join(data_json), "r") as f:
             json_file = json.load(f)

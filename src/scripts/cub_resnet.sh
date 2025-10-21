@@ -37,21 +37,21 @@ slurm_output_iter6_residual_test=./out/cub_resnet_iter6_residual_test_$CURRENT.o
 slurm_explanations=./out/cub_resnet_explanations_$CURRENT.out
 
 echo "CUB-200 ResNet101"
-source ../../env/bin/activate
+source ./env/bin/activate
 which python
 
 # BB model
 # BB Training scripts
 
-python ../codebase/train_BB_CUB.py \
+python ./src/codebase/train_BB_CUB.py \
     --bs 16 \
     --arch "ResNet101" \
     > $slurm_output_bb_train
 
 
 # BB Testing scripts
-# Update ../codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
-python ../codebase/test_BB_CUB.py \
+# Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
+python ./src/codebase/test_BB_CUB.py \
     --checkpoint-file "best_model_epoch_63.pth.tar" \
     --save-activations True \
     --layer "layer4" \
@@ -62,7 +62,7 @@ python ../codebase/test_BB_CUB.py \
 
 # T model
 # train
-python ../codebase/train_t_CUB.py \
+python ./src/codebase/train_t_CUB.py \
     --checkpoint-file "best_model_epoch_63.pth.tar" \
     --bs 32 \
     --layer "layer4" \
@@ -71,7 +71,7 @@ python ../codebase/train_t_CUB.py \
     > $slurm_output_t_train
 
 # Test
-python ../codebase/test_t_CUB.py \
+python ./src/codebase/test_t_CUB.py \
     --checkpoint-file "best_model_epoch_63.pth.tar" \
     --checkpoint-file-t "best_model_epoch_62.pth.tar" \
     --save-concepts True \
@@ -113,14 +113,14 @@ iter1_common_args='
 '
 
 # Train explainer
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --expert-to-train "explainer" \
     $iter1_common_args \
     $common_args \
     > $slurm_output_iter1_g_train
 
 # Test explainer
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" \
     --expert-to-train "explainer" \
     $iter1_common_args \
@@ -128,7 +128,7 @@ python ../codebase/test_explainer_CUB.py \
     >  $slurm_output_iter1_g_test
 
 # Train residual
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" \
     --expert-to-train "residual" \
     $iter1_common_args \
@@ -146,21 +146,21 @@ iter2_common_args='
 --lr 0.01 0.01
 '
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" \
     --expert-to-train "explainer" \
     $iter2_common_args \
     $common_args \
     >  $slurm_output_iter2_g_train
 
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "explainer" \
     $iter2_common_args \
     $common_args \
     > $slurm_output_iter2_g_test
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "residual" \
     $iter2_common_args \
@@ -178,7 +178,7 @@ iter3_common_args='
 --lr 0.01 0.01 0.01
 '
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar"  "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "explainer" \
     $iter3_common_args \
@@ -186,7 +186,7 @@ python ../codebase/train_explainer_CUB.py \
     > $slurm_output_iter3_g_train
 
 
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "explainer" \
     $iter3_common_args \
@@ -194,7 +194,7 @@ python ../codebase/test_explainer_CUB.py \
     > $slurm_output_iter3_g_test
 
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "residual" \
     $iter3_common_args \
@@ -211,7 +211,7 @@ iter4_common_args='
 --cov 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01
 '
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "explainer" \
     $iter4_common_args \
@@ -219,7 +219,7 @@ python ../codebase/train_explainer_CUB.py \
     > $slurm_output_iter4_g_train
 
 
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "explainer" \
     $iter4_common_args \
@@ -227,7 +227,7 @@ python ../codebase/test_explainer_CUB.py \
     > $slurm_output_iter4_g_test
 
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "residual" \
     $iter4_common_args \
@@ -244,7 +244,7 @@ iter5_common_args='
 --cov 0.2 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01 0.01
 '
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "explainer" \
     $iter5_common_args \
@@ -252,7 +252,7 @@ python ../codebase/train_explainer_CUB.py \
     > $slurm_output_iter5_g_train
 
 
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "explainer" \
     $iter5_common_args \
@@ -260,7 +260,7 @@ python ../codebase/test_explainer_CUB.py \
     > $slurm_output_iter5_g_test
 
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "residual" \
     $iter5_common_args \
@@ -277,7 +277,7 @@ iter6_common_args='
 --cov 0.2 0.2 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01 0.01 0.01
 '
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "explainer" \
     $iter6_common_args \
@@ -285,7 +285,7 @@ python ../codebase/train_explainer_CUB.py \
     > $slurm_output_iter6_g_train
 
 
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --expert-to-train "explainer" \
     $iter6_common_args \
@@ -293,7 +293,7 @@ python ../codebase/test_explainer_CUB.py \
     > $slurm_output_iter6_g_test
 
 
-python ../codebase/train_explainer_CUB.py \
+python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --expert-to-train "residual" \
     $iter6_common_args \
@@ -302,7 +302,7 @@ python ../codebase/train_explainer_CUB.py \
 
 
 # Train final residual
-python ../codebase/test_explainer_CUB.py \
+python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model_epoch_64.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --checkpoint-residual "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" \
     --expert-to-train "residual" \
@@ -313,5 +313,5 @@ python ../codebase/test_explainer_CUB.py \
 # ---------------------------------
 # Explanations
 # ---------------------------------
-# Update ../codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
-python ../codebase/FOLs_vision_main.py --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
+# Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
+python ./src/codebase/FOLs_vision_main.py --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
