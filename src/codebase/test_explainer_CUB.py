@@ -4,20 +4,20 @@ import sys
 
 from Explainer.experiments_explainer_CUB import test_glt
 
-sys.path.append(os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022"))
+sys.path.append(os.path.abspath("."))
 
 parser = argparse.ArgumentParser(description='CUB Testing')
 parser.add_argument('--data-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011',
+                    default='./data/CUB_200_2011',
                     help='path to dataset')
 parser.add_argument('--json-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing',
+                    default='./codebase/data_preprocessing',
                     help='path to json files containing train-val-test split')
 parser.add_argument('--logs', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log',
+                    default='./log',
                     help='path to tensorboard logs')
 parser.add_argument('--checkpoints', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints',
+                    default='./checkpoints',
                     help='path to checkpoints')
 
 parser.add_argument('--checkpoint-model', metavar='file', nargs="+",
@@ -36,7 +36,7 @@ parser.add_argument('--checkpoint-bb', metavar='file',
                     default='best_model_epoch_63.pth.tar',
                     help='checkpoint file of BB')
 parser.add_argument('--output', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out',
+                    default='./out',
                     help='path to output logs')
 parser.add_argument('--lr-residual', '--learning-rate-residual', default=0.001, type=float,
                     metavar='LR', help='initial learning rate of residual')
@@ -81,7 +81,7 @@ parser.add_argument('--smoothing_value', type=float, default=0.0,
                     help="Label smoothing value\n")
 parser.add_argument('--prev_explainer_chk_pt_folder', metavar='path', nargs="+",
                     default=[
-                        "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1",
+                        "./checkpoints/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1",
                     ],
                     help='checkpoint folders of previous experts with absolute path. For example: if the current iteration is 3, include the folder paths of the checkpoints expert 1 and expert 2')
 parser.add_argument('--concept-names', nargs='+',

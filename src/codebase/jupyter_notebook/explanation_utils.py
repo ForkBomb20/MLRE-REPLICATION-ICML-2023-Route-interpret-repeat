@@ -1,6 +1,6 @@
 import os
 # sys.path.append(
-#     os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+#     os.path.abspath("./codebase")
 # )
 import pickle
 
@@ -323,5 +323,5 @@ def get_explanations(path, show_image=True, mode="test", get_explanation=True):
 
 
 if __name__ == '__main__':
-    path = "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/Baseline/ViT-B_16/explainer"
+    path = "./out/cub/Baseline/ViT-B_16/explainer"
     get_explanations(path)

@@ -4,7 +4,7 @@ import sys
 from scipy.stats import percentileofscore
 
 sys.path.append(
-    os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+    os.path.abspath("./codebase")
 )
 import time
 import numpy as np

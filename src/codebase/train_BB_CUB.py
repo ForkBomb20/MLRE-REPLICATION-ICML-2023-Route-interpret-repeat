@@ -4,23 +4,23 @@ import sys
 
 from BB.experiments_BB_CUB import train
 
-sys.path.append(os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022"))
+sys.path.append(os.path.abspath("."))
 
 parser = argparse.ArgumentParser(description='CUB Training')
 parser.add_argument('--data-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011',
+                    default='./data/CUB_200_2011',
                     help='path to dataset')
 parser.add_argument('--json-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing',
+                    default='./codebase/data_preprocessing',
                     help='path to json files containing train-val-test split')
 parser.add_argument('--logs', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log',
+                    default='./log',
                     help='path to tensorboard logs')
 parser.add_argument('--checkpoints', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints',
+                    default='./checkpoints',
                     help='path to checkpoints')
 parser.add_argument('--output', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out',
+                    default='./out',
                     help='path to output logs')
 parser.add_argument('--attribute-file-name', metavar='file',
                     default='attributes.npy',
@@ -46,7 +46,7 @@ parser.add_argument("--name", default="VIT_CUBS",
                     help="Name of this run. Used for monitoring.")
 parser.add_argument(
     "--pretrained_dir", type=str,
-    default="/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/pretrained_VIT/ViT-B_16.npz",
+    default="./checkpoints/pretrained_VIT/ViT-B_16.npz",
     help="Where to search for pretrained ViT models."
 )
 parser.add_argument("--pretrained_model", type=str, default=None,

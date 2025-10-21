@@ -1,10 +1,10 @@
 Inputs
-data_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011
-json_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing
-logs: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log
-checkpoints: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints
+data_root: ./data/CUB_200_2011
+json_root: ./codebase/data_preprocessing
+logs: ./log
+checkpoints: ./checkpoints
 checkpoint_file: best_model_epoch_63.pth.tar
-output: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out
+output: ./out
 attribute_file_name: attributes.npy
 save_activations: True
 layer: layer4

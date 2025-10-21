@@ -6,7 +6,7 @@ from pathlib import Path
 import torch
 
 sys.path.append(
-    os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+    os.path.abspath("./codebase")
 )
 import pandas as pd
 import numpy as np

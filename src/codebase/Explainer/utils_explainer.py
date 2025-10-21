@@ -302,14 +302,14 @@ def get_details_cubs_experiment(i, arch, alpha_KD, temperature_lens, layer):
     if i == 1:
         pickle_in = open(
             os.path.join(
-                f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/explainer/{arch}/lr_{lr}_epochs_500_temperature-lens_{temperature_lens}_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{alpha_KD}_temperature-KD_10.0_hidden-layers_1_layer_{layer}_explainer_init_none",
+                f"./out/cub/explainer/{arch}/lr_{lr}_epochs_500_temperature-lens_{temperature_lens}_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{alpha_KD}_temperature-KD_10.0_hidden-layers_1_layer_{layer}_explainer_init_none",
                 iteration, "explainer", "test_explainer_configs.pkl",
             ), "rb",
         )
     else:
         pickle_in = open(
             os.path.join(
-                f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/explainer/{arch}/lr_{lr}_epochs_500_temperature-lens_{temperature_lens}_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{alpha_KD}_temperature-KD_10.0_hidden-layers_1_layer_{layer}_explainer_init_none",
+                f"./out/cub/explainer/{arch}/lr_{lr}_epochs_500_temperature-lens_{temperature_lens}_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{alpha_KD}_temperature-KD_10.0_hidden-layers_1_layer_{layer}_explainer_init_none",
                 "cov_0.2_lr_0.01", iteration, "explainer", "test_explainer_configs.pkl",
             ), "rb",
         )
@@ -347,7 +347,7 @@ def get_details_cubs_experiment(i, arch, alpha_KD, temperature_lens, layer):
         f"_temperature-KD_{float(args.temperature_KD)}_hidden-layers_{len(args.hidden_nodes)}"
         f"_layer_{args.layer}_explainer_init_{explainer_init if not args.explainer_init else args.explainer_init}"
     )
-    root = "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/"
+    root = "./out/cub/"
     experiment = f"explainer/{args.arch}/{experiment_folder}"
     expert_type = "explainer"
     output = "g_outputs"
@@ -680,7 +680,7 @@ def get_data_loaders_per_iter_completeness(args):
 
             ])
         }
-        dataset_path = f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/{args.dataset}/completeness/{args.arch}/dataset"
+        dataset_path = f"./out/{args.dataset}/completeness/{args.arch}/dataset"
         train_dataset = Dataset_completeness(dataset_path, transform=_transforms["train_transform"], mode="train")
         val_dataset = Dataset_completeness(dataset_path, transform=_transforms["val_transform"], mode="test")
         train_loader = DataLoader(train_dataset, batch_size=args.bs, shuffle=True, num_workers=4, pin_memory=True)
@@ -699,14 +699,14 @@ def get_test_loaders_per_iter_completeness(i, args):
         cov = 0.4 if args.dataset == "awa2" and args.arch == "ResNet50" else 0.2
         prev_path = "cov_0.4_lr_0.001" if args.dataset == "awa2" and args.arch == "ResNet50" else "cov_0.2_lr_0.01"
         dataset_path = os.path.join(
-            f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/{args.dataset}/explainer/{args.arch}/lr_{lr}_"
+            f"./out/{args.dataset}/explainer/{args.arch}/lr_{lr}_"
             f"epochs_500_temperature-lens_{args.temperature_lens}_"
             f"use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_"
             f"alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{args.alpha_KD}_"
             f"temperature-KD_10.0_hidden-layers_1_layer_{args.layer}_explainer_init_none",
             iteration, "explainer", "g_outputs"
         ) if i == 1 else os.path.join(
-            f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/{args.dataset}/explainer/{args.arch}/lr_{lr}_"
+            f"./out/{args.dataset}/explainer/{args.arch}/lr_{lr}_"
             f"epochs_500_temperature-lens_{args.temperature_lens}_"
             f"use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_"
             f"alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_{args.alpha_KD}_"

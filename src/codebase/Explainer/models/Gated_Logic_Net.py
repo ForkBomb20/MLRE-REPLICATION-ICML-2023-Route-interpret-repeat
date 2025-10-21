@@ -138,7 +138,7 @@ def test():
     checkpoint_model = "model_g_best_model_epoch_159.pth.tar"
     pickle_in = open(
         os.path.join(
-            "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/explainer/lr_0.1_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.4_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+            "./out/cub/explainer/lr_0.1_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.4_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
             "train_explainer_configs.pkl",
         ),
         "rb",

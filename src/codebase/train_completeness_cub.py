@@ -3,20 +3,20 @@ import os
 import sys
 
 from Explainer.completeness_score import cal_completeness_score, cal_completeness_score_per_iter
-sys.path.append(os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022"))
+sys.path.append(os.path.abspath("."))
 
 parser = argparse.ArgumentParser(description='Concept completeness Training')
 parser.add_argument('--data-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011',
+                    default='./data/CUB_200_2011',
                     help='path to dataset')
 parser.add_argument('--json-root', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing',
+                    default='./codebase/data_preprocessing',
                     help='path to json files containing train-val-test split')
 parser.add_argument('--logs', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log',
+                    default='./log',
                     help='path to tensorboard logs')
 parser.add_argument('--checkpoints', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints',
+                    default='./checkpoints',
                     help='path to checkpoints')
 parser.add_argument('--checkpoint-model', metavar='file', nargs="+",
                     default=['model_g_best_model_epoch_116.pth.tar'],
@@ -34,7 +34,7 @@ parser.add_argument('--checkpoint-file-t', metavar='file',
                     default='g_best_model_epoch_200.pth.tar',
                     help='checkpoint file of t')
 parser.add_argument('--output', metavar='DIR',
-                    default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out',
+                    default='./out',
                     help='path to output logs')
 parser.add_argument('--attribute-file-name', metavar='file',
                     default='attributes.npy',
@@ -92,7 +92,7 @@ parser.add_argument('--solver-LR', type=str, default="sgd", help='solver - sgd/a
 parser.add_argument('--loss-LR', type=str, default="BCE", help='loss - focal/BCE')
 parser.add_argument('--prev_explainer_chk_pt_folder', metavar='path', nargs="+",
                     default=[
-                        "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1",
+                        "./checkpoints/cub/explainer/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none/iter1",
                     ],
                     help='checkpoint file of residual')
 
@@ -239,7 +239,7 @@ parser.add_argument('--per_iter_completeness', default='n', type=str, metavar='N
 parser.add_argument('--baseline', default='n', type=str, metavar='N',
                     help='Compute completeness per iteration or as a whole')
 
-parser.add_argument('--dataset_path', default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/Baseline_PostHoc/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.45_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none', type=str, metavar='N',
+parser.add_argument('--dataset_path', default='./out/cub/Baseline_PostHoc/ViT-B_16/lr_0.01_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.45_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none', type=str, metavar='N',
                     help='Compute completeness per iteration or as a whole')
 
 

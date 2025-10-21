@@ -6,7 +6,7 @@ import sys
 from Explainer.models.Gated_Logic_Net import Gated_Logic_Net
 
 sys.path.append(
-    os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+    os.path.abspath("./codebase")
 )
 import numpy as np
 import torch
@@ -70,7 +70,7 @@ def counterfactual_preds(n_experts, path, prev_path, n_concept_to_retain):
             f"_temperature-KD_{float(args.temperature_KD)}_hidden-layers_{len(args.hidden_nodes)}"
             f"_layer_{args.layer}_explainer_init_{explainer_init if not args.explainer_init else args.explainer_init}"
         )
-        root = "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/"
+        root = "./out/cub/"
         experiment = f"explainer/{args.arch}/{experiment_folder}" if i == 1 else \
             f"explainer/{args.arch}/{experiment_folder}/{prev_path}"
         iteration = f"iter{i}"
@@ -217,6 +217,6 @@ def counterfactual_preds(n_experts, path, prev_path, n_concept_to_retain):
 if __name__ == '__main__':
     lr = 0.01
     cov = 0.2
-    path = f"/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out/cub/explainer/ViT-B_16/lr_{lr}_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none"
+    path = f"./out/cub/explainer/ViT-B_16/lr_{lr}_epochs_500_temperature-lens_6.0_use-concepts-as-pi-input_True_input-size-pi_2048_cov_{cov}_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.99_temperature-KD_10.0_hidden-layers_1_layer_VIT_explainer_init_none"
     n_experts = 6
     _dict = counterfactual_preds(n_experts, path)

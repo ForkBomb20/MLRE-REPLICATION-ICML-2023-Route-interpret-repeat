@@ -1,9 +1,9 @@
 Train BB for CUB
-data_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011
-json_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing
-logs: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log
-checkpoints: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints
-output: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out
+data_root: ./data/CUB_200_2011
+json_root: ./codebase/data_preprocessing
+logs: ./log
+checkpoints: ./checkpoints
+output: ./out
 attribute_file_name: attributes.npy
 seed: 0
 pretrained: True
@@ -17,7 +17,7 @@ weight_decay: 0.0001
 epochs: 95
 arch: ResNet101
 name: VIT_CUBS
-pretrained_dir: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/pretrained_VIT/ViT-B_16.npz
+pretrained_dir: ./checkpoints/pretrained_VIT/ViT-B_16.npz
 pretrained_model: None
 num_steps: 10000
 decay_type: cosine

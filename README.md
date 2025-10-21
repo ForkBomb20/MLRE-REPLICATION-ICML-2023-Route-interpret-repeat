@@ -24,7 +24,7 @@ conda activate python_3_7_rtx_6000
 
 [CUB-200 Official](https://www.vision.caltech.edu/datasets/cub_200_2011/)
 
-Search `--data-root` and `/ocean/projects/asc170022p/shg121/PhD/ICLR-2022` variable in this codebase and replace appropriate paths.
+Search `--data-root` and `.` variable in this codebase and replace appropriate paths.
 
 ## 3. Data preprocessing CUB200
 
@@ -44,7 +44,7 @@ python ./src/codebase/data_preprocessing/download_cub.py
 All scripts for training MoIE is in [`./src/scripts`](/src/scripts).
 Follow every command sequentially of each script to train/test the Blackbox (BB), concept predictor (t), explainers (g) and residuals (r).
 
-- First, find and replace the project path `/ocean/projects/asc170022p/shg121/PhD/ICLR-2022` from the whole codebase with appropriate path.
+- First, find and replace the project path `.` from the whole codebase with appropriate path.
 
 - After training and testing MoIE, as last step in each script, [`FOLs_vision_main.py`](/src/codebase/FOLs_vision_main.py) file is responsible for generating instance specific FOL. This file uses [`./src/codebase/Completeness_and_interventions/paths_MoIE.json`](/src/codebase/Completeness_and_interventions/paths_MoIE.json) file where we keep all the paths and filenames of the checkpoints of Blackbox (bb), concept predictor (t), explainer (g), and residual (r). Replace those paths and filenames with the appropriate ones.
 

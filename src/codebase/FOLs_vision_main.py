@@ -8,22 +8,22 @@ import Completeness_and_interventions.concept_completeness_intervention_utils as
 import utils
 from Explainer.Explanations_builder import build_FOLs
 
-sys.path.append(os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022"))
+sys.path.append(os.path.abspath("."))
 
 
 def config():
     parser = argparse.ArgumentParser()
     parser.add_argument('--base_path', metavar='DIR',
-                        default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022',
+                        default='.',
                         help='path to checkpoints')
     parser.add_argument('--checkpoints', metavar='DIR',
-                        default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints',
+                        default='./checkpoints',
                         help='path to checkpoints')
     parser.add_argument('--output', metavar='DIR',
-                        default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out',
+                        default='./out',
                         help='path to output logs')
     parser.add_argument('--save_path', metavar='DIR',
-                        default='/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/Plots/concepts',
+                        default='./Plots/concepts',
                         help='path of the concepts to be saved')
     parser.add_argument('--arch', type=str, default="ViT-B_16", help='BB architecture')
     parser.add_argument('--dataset', type=str, default="cub", help='dataset name')

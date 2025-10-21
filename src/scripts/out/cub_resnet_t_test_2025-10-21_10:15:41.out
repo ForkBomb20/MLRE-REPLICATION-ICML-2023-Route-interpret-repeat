@@ -1,12 +1,12 @@
 Getting T ready...
 Inputs
-data_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011
-json_root: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase/data_preprocessing
-logs: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/log
-checkpoints: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints
+data_root: ./data/CUB_200_2011
+json_root: ./codebase/data_preprocessing
+logs: ./log
+checkpoints: ./checkpoints
 checkpoint_file: best_model_epoch_63.pth.tar
 checkpoint_file_t: best_model_epoch_62.pth.tar
-output: /ocean/projects/asc170022p/shg121/PhD/ICLR-2022/out
+output: ./out
 attribute_file_name: attributes.npy
 seed: 0
 pretrained: True
@@ -31,4 +31,4 @@ projected: n
 bb_projected: _cov_1.0/iter1/bb_projected/batch_norm_n_finetune_y
 root_explainer: _cov_1.0/iter1/t_projected/batch_norm_n_finetune_y
 dataset_folder_concepts: lr_0.001_epochs_95_ResNet101_layer4_adaptive_sgd_BCE
-/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/data/CUB_200_2011
+./data/CUB_200_2011

@@ -10,7 +10,7 @@ from Explainer.models.Gated_Logic_Net import Gated_Logic_Net
 from Explainer.models.explainer import Explainer
 
 sys.path.append(
-    os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+    os.path.abspath("./codebase")
 )
 
 

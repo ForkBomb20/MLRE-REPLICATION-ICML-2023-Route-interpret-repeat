@@ -9,7 +9,7 @@ from BB.models.t import Logistic_Regression_t
 from Explainer.models.Gated_Logic_Net import Gated_Logic_Net
 
 sys.path.append(
-    os.path.abspath("/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/codebase")
+    os.path.abspath("./codebase")
 )
 
 import numpy as np
@@ -188,7 +188,7 @@ def get_cub_models(args, iteration):
     ).to(device)
     bb.load_state_dict(
         torch.load(
-            "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/cub/BB/lr_0.03_epochs_95/ViT-B_16/VIT_CUBS_8000_checkpoint.bin"
+            "./checkpoints/cub/BB/lr_0.03_epochs_95/ViT-B_16/VIT_CUBS_8000_checkpoint.bin"
         )["model"]
     )
     bb.eval()
@@ -198,7 +198,7 @@ def get_cub_models(args, iteration):
     ).to(device)
     t_model.load_state_dict(
         torch.load(
-            "/ocean/projects/asc170022p/shg121/PhD/ICLR-2022/checkpoints/cub/t/lr_0.03_epochs_95/lr_0.03_epochs_95_ViT-B_16_layer4_VIT_sgd_BCE/g_best_model_epoch_54.pth.tar"
+            "./checkpoints/cub/t/lr_0.03_epochs_95/lr_0.03_epochs_95_ViT-B_16_layer4_VIT_sgd_BCE/g_best_model_epoch_54.pth.tar"
         )
     )
     t_model.eval()
