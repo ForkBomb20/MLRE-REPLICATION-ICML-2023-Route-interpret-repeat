@@ -112,7 +112,7 @@ caldav
 clip
 contextlib2
 coverage
-cryptacular
+#cryptacular
 defusedxml
 django>=4.2
 fastjsonschema
