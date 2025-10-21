@@ -16,8 +16,9 @@
 ## 1. Environment setup
 
 ```bash
-conda env create --name python_3_7_rtx_6000 -f environment.yml
-conda activate python_3_7_rtx_6000
+python3 -m venv env
+source env/bin/activate
+python -m pip install -r requirements.txt
 ```
 
 ## 2. Downloading data
