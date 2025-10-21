@@ -25,20 +25,16 @@ python -m pip install -r requirements.txt
 
 [CUB-200 Official](https://www.vision.caltech.edu/datasets/cub_200_2011/)
 
-Search `--data-root` and `.` variable in this codebase and replace appropriate paths.
+Download CUB_200_2011.tgz (1.2GB)
 
 ## 3. Data preprocessing CUB200
 
-To get CUB200 metadata and dataset splits, follow [Logic Explained Network](https://github.com/pietrobarbiero/logic_explained_networks/tree/master/data).
-Once json files are downloaded, search for `--json-root` variable in this codebase and replace the appropriate paths.
-
-To preprocess the concepts for CUB200, move the **inner** `CUB_200_2011` folder along with `attributes.txt` from the extracted `CUB_200_2011` folder into the root directory of the repository. Also ensure that a `data/` folder exists in the root directory. Then, from the root director, run:
-
+To preprocess the concepts for CUB200, move the **inner** `CUB_200_2011` folder along with `attributes.txt` from the extracted `CUB_200_2011` folder into the root directory of the repository. Also ensure that a `data/` folder exists in the root directory. Then, from the root directory, run:
 ```python
 python ./src/codebase/data_preprocessing/download_cub.py
 ```
 
-(Author used code from LEN and modified slightly)
+Once json files are downloaded, search for `--json-root` and `--data-root` variable in this codebase and replace the appropriate paths.
 
 ## 4. Training pipeline
 

@@ -4,21 +4,7 @@ import numpy as np
 import pandas as pd
 
 
-# noinspection PyUnresolvedReferences
 def download_cub(root="CUB_200_2011", force=True):
-
-    if os.path.isdir(root) and not force:
-        print("Dataset already downloaded")
-        return
-
-    os.system("git clone https://github.com/chentinghao/download_google_drive.git")
-    # from download_google_drive.download_gdrive import download_file_from_google_drive
-    # download_file_from_google_drive("1hbzc_P1FuxMkcabkgn9ZKinBwW683j45", "CUB_200_2011.tgz")
-    print("Dataset downloaded")
-
-    os.system("tar -zxvf CUB_200_2011.tgz")
-    print("\nDataset extracted")
-
     origin_dir = os.curdir
     os.chdir(root)
 
@@ -105,7 +91,6 @@ def download_cub(root="CUB_200_2011", force=True):
         if item not in ["images", "images.txt", "attributes_names.txt", "attribute_groups.json",
                         "original_attributes.npy",  "attributes.npy"]:
             os.system(f"rm -r {item}")
-    os.system("rm -rf ../download_google_drive")
     print("Temporary file cleaned")
 
     os.system("mv images/* .")

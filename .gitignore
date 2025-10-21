@@ -7,8 +7,6 @@ __pycache__/
 env
 env*.yml
 
-data
-
-src/scripts/out/
-out/
-log/
+data/*
+out/*
+log/*
