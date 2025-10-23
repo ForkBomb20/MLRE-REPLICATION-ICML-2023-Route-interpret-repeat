@@ -31,7 +31,7 @@ def train(args):
     os.makedirs(output_path, exist_ok=True)
     os.makedirs(tb_logs_path, exist_ok=True)
 
-    device = utils.get_device()
+    device = 'mps'
     print(f"Device: {device}")
 
     transforms = utils.get_train_val_transforms(args.dataset, args.img_size, args.arch)
