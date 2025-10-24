@@ -46,38 +46,39 @@ slurm_output_iter6_residual_test=./out/cub_resnet_iter6_residual_test_$CURRENT.o
 slurm_explanations=./out/cub_resnet_explanations_$CURRENT.out
 
 # Uncomment for great lakes
-# module load python/3.13.2
+module load python/3.13.2
 echo "CUB-200 ResNet101"
 source ./env/bin/activate
 which python
 
-if [ ! -d /tmp/$USER/data_cub ]; then
-    echo "Copying dataset to local /tmp..."
-    mkdir -p /tmp/$USER/data_cub
-    rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data_cub
-    echo "Dataset copied to local /tmp."
-else
-    echo "Using cached local dataset."
-fi
+# if [ ! -d /tmp/$USER/data_cub ]; then
+#     echo "Copying dataset to local /tmp..."
+#     mkdir -p /tmp/$USER/data_cub
+#     rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data_cub
+#     echo "Dataset copied to local /tmp."
+# else
+#     echo "Using cached local dataset."
+# fi
 
 # BB model
 # BB Training scripts
 
-python ./src/codebase/train_BB_CUB.py \
-    --bs 16 \
-    --arch "ResNet101" \
-    --data-root "/tmp/$USER/data_cub/data/CUB_200_2011" \
-    > $slurm_output_bb_train
+# python ./src/codebase/train_BB_CUB.py \
+#     --bs 16 \
+#     --arch "ResNet101" \
+#     --data-root "/tmp/$USER/data_cub/data/CUB_200_2011" \
+#     > $slurm_output_bb_train
 
 
 # BB Testing scripts
 # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
 python ./src/codebase/test_BB_CUB.py \
-    --checkpoint-file "best_model_epoch_63.pth.tar" \
+    --checkpoint-file "best_model.pth.tar" \
     --save-activations True \
     --layer "layer4" \
     --bs 16 \
     --arch "ResNet101" \
+    --data-root "/tmp/$USER/data_cub/CUB_200_2011" \
     > $slurm_output_bb_test
 
 
