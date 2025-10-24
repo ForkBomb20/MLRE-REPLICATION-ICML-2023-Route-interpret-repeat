@@ -10,3 +10,6 @@ env*.yml
 data/*
 out/*
 log/*
+
+checkpoints/*
+slurm_outs/*
