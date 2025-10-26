@@ -13,6 +13,14 @@
    - 7-1. [Arguments Example](#7-1-arguments-example)
 8. [Checkpoints](#8-checkpoints)
 
+# Accessing Great Lakes
+```bash
+uniqname@greatlakes.arc-ts.umich.edu
+cd /scratch/eecs498f25s00{7 or 8}_class_root/eecs498f25s00{7 or 8}_class/
+cd uniqname
+module load python/3.13.2
+```
+
 ## 1. Environment setup
 Python version 3.13
 ```bash
