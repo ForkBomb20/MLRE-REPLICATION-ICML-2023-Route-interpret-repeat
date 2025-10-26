@@ -7,7 +7,9 @@
 #SBATCH --ntasks-per-node=1    # One process per node
 #SBATCH --cpus-per-task=8      # Number of CPU cores per GPU task (adjust as needed)
 #SBATCH --mem=64G              # Total memory per node (adjust as needed)
-#SBATCH --time=8:00:00      # Job time limit (8 hours)
+#SBATCH --time=8:00:00         # Job time limit (8 hours)
+#SBATCH --mail-type=END,FAIL   # Send email on job end or failure
+#SBATCH --account=eecs498f25s007_class  # Choose MLRE class account
 
 pwd; hostname; date
 CURRENT=`date +"%Y-%m-%d_%T"`
@@ -67,6 +69,7 @@ fi
 #     --bs 16 \
 #     --arch "ResNet101" \
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
+#     --data-root "/tmp/$USER/data_cub/CUB_200_2011" \
 #     > $slurm_output_bb_train
 
 
