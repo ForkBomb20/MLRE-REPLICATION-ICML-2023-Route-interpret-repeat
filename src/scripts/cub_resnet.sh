@@ -2,12 +2,12 @@
 #SBATCH --job-name=cub_resnet
 #SBATCH --output=slurm_outs/cub_resnet_%j.out
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1           # Request 5 GPUs
+#SBATCH --gres=gpu:1           # Request 1 GPU
 #SBATCH --nodes=1              # Run on one node
 #SBATCH --ntasks-per-node=1    # One process per node
 #SBATCH --cpus-per-task=8      # Number of CPU cores per GPU task (adjust as needed)
-#SBATCH --mem=32G              # Total memory per node (adjust as needed)
-#SBATCH --time=2:00:00      # Job time limit (2 hours)
+#SBATCH --mem=64G              # Total memory per node (adjust as needed)
+#SBATCH --time=8:00:00      # Job time limit (8 hours)
 
 pwd; hostname; date
 CURRENT=`date +"%Y-%m-%d_%T"`
@@ -73,7 +73,7 @@ fi
 # BB Testing scripts
 # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
 python ./src/codebase/test_BB_CUB.py \
-    --checkpoint-file "best_model.pth.tar" \
+    --checkpoint-file "g_best_model_epoch_82.pth.tar" \
     --save-activations True \
     --layer "layer4" \
     --bs 16 \

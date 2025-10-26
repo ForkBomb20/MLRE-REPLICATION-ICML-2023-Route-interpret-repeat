@@ -21,6 +21,20 @@ cd uniqname
 module load python/3.13.2
 ```
 
+## Runing on an interactive node:
+```bash
+salloc --partition=gpu --gres=gpu:1 --time=8:00:00 --mem=64G --account=eecs498f25s00{7 or 8}_class
+module load python/3.13.2
+source env/bin/activate
+./src/scrpts/transfer_to_tmp.sh
+```
+
+Once you're done with the interactive node:
+
+```bash
+scancel $SLURM_JOB_ID
+```
+
 ## 1. Environment setup
 Python version 3.13
 ```bash
