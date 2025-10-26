@@ -2,12 +2,14 @@
 #SBATCH --job-name=cub_resnet
 #SBATCH --output=slurm_outs/cub_resnet_%j.out
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1           # Request 5 GPUs
+#SBATCH --gres=gpu:1           # Request 1 GPU
 #SBATCH --nodes=1              # Run on one node
 #SBATCH --ntasks-per-node=1    # One process per node
 #SBATCH --cpus-per-task=8      # Number of CPU cores per GPU task (adjust as needed)
-#SBATCH --mem=32G              # Total memory per node (adjust as needed)
-#SBATCH --time=2:00:00      # Job time limit (2 hours)
+#SBATCH --mem=64G              # Total memory per node (adjust as needed)
+#SBATCH --time=8:00:00         # Job time limit (8 hours)
+#SBATCH --mail-type=END,FAIL   # Send email on job end or failure
+#SBATCH --account=eecs498f25s007_class  # Choose MLRE class account
 
 pwd; hostname; date
 CURRENT=`date +"%Y-%m-%d_%T"`
@@ -51,14 +53,14 @@ echo "CUB-200 ResNet101"
 source ./env/bin/activate
 which python
 
-# if [ ! -d /tmp/$USER/data_cub ]; then
-#     echo "Copying dataset to local /tmp..."
-#     mkdir -p /tmp/$USER/data_cub
-#     rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data_cub
-#     echo "Dataset copied to local /tmp."
-# else
-#     echo "Using cached local dataset."
-# fi
+if [ ! -d /tmp/$USER/data_cub ]; then
+    echo "Copying dataset to local /tmp..."
+    mkdir -p /tmp/$USER/data_cub
+    rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data_cub
+    echo "Dataset copied to local /tmp."
+else
+    echo "Using cached local dataset."
+fi
 
 # BB model
 # BB Training scripts
@@ -66,14 +68,14 @@ which python
 # python ./src/codebase/train_BB_CUB.py \
 #     --bs 16 \
 #     --arch "ResNet101" \
-#     --data-root "/tmp/$USER/data_cub/data/CUB_200_2011" \
+#     --data-root "/tmp/$USER/data_cub/CUB_200_2011" \
 #     > $slurm_output_bb_train
 
 
 # BB Testing scripts
 # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
 python ./src/codebase/test_BB_CUB.py \
-    --checkpoint-file "best_model.pth.tar" \
+    --checkpoint-file "best_model_epoch_63.pth.tar" \
     --save-activations True \
     --layer "layer4" \
     --bs 16 \
