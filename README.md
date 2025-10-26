@@ -16,9 +16,34 @@
 # Accessing Great Lakes
 ```bash
 uniqname@greatlakes.arc-ts.umich.edu
-cd /scratch/eecs498f25s00{7 or 8}_class_root/eecs498f25s00{7 or 8}_class/
+cd /scratch/eecs498f25s00{6 or 7}_class_root/eecs498f25s00{6 or 7}_class/
 cd uniqname
 module load python/3.13.2
+```
+
+## Runing on an interactive node:
+```bash
+salloc --partition=gpu --gres=gpu:1 --time=8:00:00 --mem=64G --account=eecs498f25s00{6 or 7}_class
+module load python/3.13.2
+source env/bin/activate
+chmod +x ./src/scripts/transfer_to_tmp.sh
+./src/scripts/transfer_to_tmp.sh
+```
+
+Once you're done with the interactive node:
+
+```bash
+scancel $SLURM_JOB_ID
+```
+
+## Runing an sbatch job:
+```bash
+sbatch ./src/scripts/cub_resnet.sh
+```
+
+If you need to close the job prematurely, run `sq`, find the job ID of the job, and run:
+```bash
+scancel JOB_ID
 ```
 
 ## 1. Environment setup
