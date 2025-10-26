@@ -450,7 +450,6 @@ def fit_t(
                 image, attribute = utils.get_image_attributes(data_tuple, spurious_waterbird_landbird, dataset_name)
                 image = image.to(device, dtype=torch.float)
                 attribute = attribute.to(device, dtype=torch.float)
-                print(attribute, attribute.shape)
                 batch_size = image.size(0)
                 X_batch = np.zeros((batch_size, 108))
                 X_batch[:, 0:108] = attribute[:, 0:108].cpu().detach().numpy()
@@ -611,13 +610,16 @@ def get_bb(args, chk_pt_path_bb, device):
 
 def get_phi_x(image, bb, arch, layer, cfs, projected="n"):
     if (arch == "ResNet50" or arch == "ResNet101" or arch == "ResNet152") and projected == "n":
-        _ = bb(image)
-        # feature_x = get_flattened_x(bb.feature_store[layer], flattening_type)
-        feature_x = bb.feature_store[layer]
-        return feature_x
+        # run BB forward without gradient tracking and return detached features
+        with torch.no_grad():
+            _ = bb(image)
+            feature_x = bb.feature_store[layer]
+        return feature_x.detach()
     elif (arch == "ResNet50" or arch == "ResNet101" or arch == "ResNet152") and projected == "y":
-        feature_x, _ = bb(image, cfs, get_phi=True)
-        return feature_x
+        # projected BB may return features computed with cfs; ensure no BB activations are kept
+        with torch.no_grad():
+            feature_x, _ = bb(image, cfs, get_phi=True)
+        return feature_x.detach()
 
 
 def get_input_size_t(args, bb):
