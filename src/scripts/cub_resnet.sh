@@ -51,10 +51,10 @@ echo "CUB-200 ResNet101"
 source ./env/bin/activate
 which python
 
-if [ ! -d /tmp/$USER/data_cub ]; then
+if [ ! -d /tmp/$USER/data ]; then
     echo "Copying dataset to local /tmp..."
-    mkdir -p /tmp/$USER/data_cub
-    rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data_cub
+    mkdir -p /tmp/$USER/data
+    rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data
     echo "Dataset copied to local /tmp."
 else
     echo "Using cached local dataset."
@@ -66,7 +66,7 @@ fi
 # python ./src/codebase/train_BB_CUB.py \
 #     --bs 16 \
 #     --arch "ResNet101" \
-#     --data-root "/tmp/$USER/data_cub/data/CUB_200_2011" \
+#     --data-root "/tmp/$USER/data/CUB_200_2011" \
 #     > $slurm_output_bb_train
 
 
@@ -78,7 +78,7 @@ python ./src/codebase/test_BB_CUB.py \
     --layer "layer4" \
     --bs 16 \
     --arch "ResNet101" \
-    --data-root "/tmp/$USER/data_cub/CUB_200_2011" \
+    --data-root "/tmp/$USER/data/CUB_200_2011" \
     > $slurm_output_bb_test
 
 
