@@ -69,7 +69,6 @@ fi
 #     --bs 16 \
 #     --arch "ResNet101" \
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
-#     --data-root "/tmp/$USER/data_cub/CUB_200_2011" \
 #     > $slurm_output_bb_train
 
 
@@ -88,7 +87,7 @@ python ./src/codebase/test_BB_CUB.py \
 # T model
 # train
 python ./src/codebase/train_t_CUB.py \
-    --checkpoint-file "best_model_epoch_63.pth.tar" \
+    --checkpoint-file "g_best_model_epoch_82.pth.tar" \
     --bs 32 \
     --layer "layer4" \
     --flattening-type "adaptive" \
@@ -97,7 +96,7 @@ python ./src/codebase/train_t_CUB.py \
 
 # Test
 python ./src/codebase/test_t_CUB.py \
-    --checkpoint-file "best_model_epoch_63.pth.tar" \
+    --checkpoint-file "g_best_model_epoch_82.pth.tar" \
     --checkpoint-file-t "best_model_epoch_62.pth.tar" \
     --save-concepts True \
     --bs 16 \
