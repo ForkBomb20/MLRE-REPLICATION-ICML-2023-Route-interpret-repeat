@@ -286,8 +286,8 @@ def save_concepts(
                 label = label.to(device, dtype=torch.float)
                 attribute = attribute.to(device, dtype=torch.float)
                 batch_size = image.size(0)
-                X_batch = np.zeros((batch_size, 4))
-                X_batch[:, 0:4] = attribute[:, 108:112].cpu().detach().numpy()
+                X_batch = np.zeros((batch_size, 108))
+                X_batch[:, 0:108] = attribute[:, 0:108].cpu().detach().numpy()
                 with torch.no_grad():
                     cfs = torch.nn.Parameter(torch.Tensor(X_batch).to(device), requires_grad=False)
 
@@ -354,8 +354,8 @@ def predict_t(
                 image = image.to(device, dtype=torch.float)
                 attribute = attribute.to(device, dtype=torch.float)
                 batch_size = image.size(0)
-                X_batch = np.zeros((batch_size, 4))
-                X_batch[:, 0:4] = attribute[:, 108:112].cpu().detach().numpy()
+                X_batch = np.zeros((batch_size, 108))
+                X_batch[:, 0:108] = attribute[:, 0:108].cpu().detach().numpy()
                 with torch.no_grad():
                     cfs = torch.nn.Parameter(torch.Tensor(X_batch).to(device), requires_grad=False)
 
@@ -450,9 +450,10 @@ def fit_t(
                 image, attribute = utils.get_image_attributes(data_tuple, spurious_waterbird_landbird, dataset_name)
                 image = image.to(device, dtype=torch.float)
                 attribute = attribute.to(device, dtype=torch.float)
+                print(attribute, attribute.shape)
                 batch_size = image.size(0)
-                X_batch = np.zeros((batch_size, 4))
-                X_batch[:, 0:4] = attribute[:, 108:112].cpu().detach().numpy()
+                X_batch = np.zeros((batch_size, 108))
+                X_batch[:, 0:108] = attribute[:, 0:108].cpu().detach().numpy()
                 with torch.no_grad():
                     cfs = torch.nn.Parameter(torch.Tensor(X_batch).to(device), requires_grad=False)
                 feature_x = get_phi_x(image, bb, arch, layer, cfs, projected)
@@ -476,8 +477,8 @@ def fit_t(
                     image = image.to(device, dtype=torch.float)
                     attribute = attribute.to(device, dtype=torch.float)
                     batch_size = image.size(0)
-                    X_batch = np.zeros((batch_size, 4))
-                    X_batch[:, 0:4] = attribute[:, 108:112].cpu().detach().numpy()
+                    X_batch = np.zeros((batch_size, 108))
+                    X_batch[:, 0:108] = attribute[:, 0:108].cpu().detach().numpy()
                     with torch.no_grad():
                         cfs = torch.nn.Parameter(torch.Tensor(X_batch).to(device), requires_grad=False)
                     feature_x = get_phi_x(image, bb, arch, layer, cfs, projected)
@@ -596,7 +597,7 @@ def get_bb(args, chk_pt_path_bb, device):
         attributes_train = torch.load(os.path.join(dataset_path, "train_attributes.pt")).numpy()
         N = attributes_train.shape[0]
         X = np.zeros((N, 4))
-        X[:, 0:4] = attributes_train[:, 108:112]
+        X[:, 0:108] = attributes_train[:, 0:108]
         XTX = np.transpose(X).dot(X)
         kernel = np.linalg.inv(XTX)
         cf_kernel = torch.nn.Parameter(torch.tensor(kernel).float().to(device), requires_grad=False)
