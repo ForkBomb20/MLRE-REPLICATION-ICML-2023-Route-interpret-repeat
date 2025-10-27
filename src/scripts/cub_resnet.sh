@@ -92,12 +92,13 @@ python ./src/codebase/train_t_CUB.py \
     --layer "layer4" \
     --flattening-type "adaptive" \
     --arch "ResNet101" \
+    --data-root "/tmp/$USER/data/CUB_200_2011" \
     > $slurm_output_t_train
 
 # Test
 python ./src/codebase/test_t_CUB.py \
     --checkpoint-file "g_best_model_epoch_82.pth.tar" \
-    --checkpoint-file-t "best_model.pth.tar" \
+    --checkpoint-file-t "g_best_model_epoch_200.pth.tar" \
     --save-concepts True \
     --bs 16 \
     --solver-LR "sgd" \
@@ -105,6 +106,7 @@ python ./src/codebase/test_t_CUB.py \
     --layer "layer4" \
     --flattening-type "adaptive" \
     --arch "ResNet101" \
+    --data-root "/tmp/$USER/data/CUB_200_2011" \
     > $slurm_output_t_test
 
 
@@ -113,7 +115,7 @@ python ./src/codebase/test_t_CUB.py \
 # Common args for all explainer/residual train/test calls
 common_args='
 --root-bb lr_0.001_epochs_95
---checkpoint-bb best_model_epoch_63.pth.tar
+--checkpoint-bb g_best_model_epoch_82.pth.tar
 --dataset cub
 --bs 16
 --dataset-folder-concepts lr_0.001_epochs_95_ResNet101_layer4_adaptive_sgd_BCE
@@ -125,6 +127,7 @@ common_args='
 --hidden-nodes 10
 --layer layer4
 --arch ResNet101
+--data-root "/tmp/$USER/data/CUB_200_2011"
 '
 
 #---------------------------------
