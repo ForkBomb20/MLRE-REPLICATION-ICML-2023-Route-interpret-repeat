@@ -46,11 +46,11 @@
     },
     "t": {
       "checkpoint_t_path": "lr_0.001_epochs_95/lr_0.001_epochs_95_ResNet101_layer4_adaptive_sgd_BCE",
-      "checkpoint_file": "g_best_model_epoch_200.pth.tar"
+      "checkpoint_file": "best_model.pth.tar"
     },
     "bb": {
       "root_bb": "lr_0.001_epochs_95",
-      "checkpoint_bb": "g_best_model_epoch_82.pth.tar",
+      "checkpoint_bb": "best_model.pth.tar",
       "smoothing_value": 0,
       "img_size": 448,
       "layer": "layer4"
