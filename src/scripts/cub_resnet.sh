@@ -127,7 +127,7 @@ common_args='
 --hidden-nodes 10
 --layer layer4
 --arch ResNet101
---data-root "/tmp/$USER/data/CUB_200_2011"
+--data-root /tmp/$USER/data/CUB_200_2011
 '
 
 #---------------------------------
