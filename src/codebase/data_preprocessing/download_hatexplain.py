@@ -192,8 +192,7 @@ if __name__ == "__main__":
     
     INPUT_FILE = "/scratch/eecs498f25s007_class_root/eecs498f25s007_class/shared_data/group12/data/hatexplain/dataset.json"
     POST_ID_DIVISIONS = "/scratch/eecs498f25s007_class_root/eecs498f25s007_class/shared_data/group12/data/hatexplain/post_id_divisions.json"
-    #OUTPUT_BASE_DIR = f"/scratch/eecs498f25s007_class_root/eecs498f25s007_class/{uniqname}/MLRE-REPLICATION-ICML-2023-Route-interpret-repeat/data/hatexplain"
-    OUTPUT_BASE_DIR = f"/home/xinyiade/MLRE/data/hatexplain"
+    OUTPUT_BASE_DIR = f"/scratch/eecs498f25s007_class_root/eecs498f25s007_class/{uniqname}/MLRE-REPLICATION-ICML-2023-Route-interpret-repeat/data/hatexplain"
     
     
     output_dir = format_hatexplain_for_moie(
