@@ -2,19 +2,20 @@
 #SBATCH --job-name=cub_resnet
 #SBATCH --output=slurm_outs/cub_resnet_%j.out
 #SBATCH --partition=gpu
-#SBATCH --gres=gpu:1           # Request 1 GPU
-#SBATCH --nodes=1              # Run on one node
-#SBATCH --ntasks-per-node=1    # One process per node
-#SBATCH --cpus-per-task=8      # Number of CPU cores per GPU task (adjust as needed)
-#SBATCH --mem=64G              # Total memory per node (adjust as needed)
-#SBATCH --time=8:00:00         # Job time limit (8 hours)
-#SBATCH --mail-type=END,FAIL   # Send email on job end or failure
-#SBATCH --account=eecs498f25s007_class  # Choose MLRE class account
+#SBATCH --gres=gpu:1
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=64G
+#SBATCH --time=8:00:00
+#SBATCH --mail-type=END,FAIL
+#SBATCH --account=eecs498f25s007_class
 
 pwd; hostname; date
 CURRENT=`date +"%Y-%m-%d_%T"`
 echo $CURRENT
 
+# Output paths
 slurm_output_bb_train=./out/cub_resnet_bb_train_$CURRENT.out
 slurm_output_bb_test=./out/cub_resnet_bb_test_$CURRENT.out
 slurm_output_t_train=./out/cub_resnet_t_train_$CURRENT.out
@@ -47,12 +48,13 @@ slurm_output_iter6_residual_test=./out/cub_resnet_iter6_residual_test_$CURRENT.o
 
 slurm_explanations=./out/cub_resnet_explanations_$CURRENT.out
 
-# Uncomment for great lakes
+# Environment setup
 module load python/3.13.2
 echo "CUB-200 ResNet101"
 source ./env/bin/activate
 which python
 
+# Dataset check
 if [ ! -d /tmp/$USER/data ]; then
     echo "Copying dataset to local /tmp..."
     mkdir -p /tmp/$USER/data
@@ -62,18 +64,17 @@ else
     echo "Using cached local dataset."
 fi
 
+# ------------------------------------------------
 # BB model
-# BB Training scripts
-
+# ------------------------------------------------
+echo "[INFO] Would run: python ./src/codebase/train_BB_CUB.py ..."
 # python ./src/codebase/train_BB_CUB.py \
 #     --bs 16 \
 #     --arch "ResNet101" \
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
 #     > $slurm_output_bb_train
 
-
-# BB Testing scripts
-# Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
+echo "[INFO] Would run: python ./src/codebase/test_BB_CUB.py ..."
 # python ./src/codebase/test_BB_CUB.py \
 #     --checkpoint-file "best_model.pth.tar" \
 #     --save-activations True \
@@ -83,9 +84,10 @@ fi
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
 #     > $slurm_output_bb_test
 
-
+# ------------------------------------------------
 # T model
-# train
+# ------------------------------------------------
+echo "[INFO] Would run: python ./src/codebase/train_t_CUB.py ..."
 # python ./src/codebase/train_t_CUB.py \
 #     --checkpoint-file "best_model.pth.tar" \
 #     --bs 32 \
@@ -95,7 +97,7 @@ fi
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
 #     > $slurm_output_t_train
 
-# # Test
+echo "[INFO] Would run: python ./src/codebase/test_t_CUB.py ..."
 # python ./src/codebase/test_t_CUB.py \
 #     --checkpoint-file "best_model.pth.tar" \
 #     --checkpoint-file-t "best_model.pth.tar" \
@@ -109,10 +111,9 @@ fi
 #     --data-root "/tmp/$USER/data/CUB_200_2011" \
 #     > $slurm_output_t_test
 
-
-# MoIE Training scripts
-
-# Common args for all explainer/residual train/test calls
+# ------------------------------------------------
+# MoIE Training
+# ------------------------------------------------
 common_args='
 --root-bb lr_0.001_epochs_95
 --checkpoint-bb best_model.pth.tar
@@ -131,7 +132,7 @@ common_args='
 '
 
 #---------------------------------
-# iter 1
+# Iteration 1
 #---------------------------------
 iter1_common_args='
 --iter 1
@@ -139,7 +140,7 @@ iter1_common_args='
 --lr 0.01
 '
 
-# Train explainer
+echo "[RUNNING] Iter 1 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
     --expert-to-train "explainer" \
     $iter1_common_args \
@@ -147,15 +148,15 @@ python ./src/codebase/train_explainer_CUB.py \
     --epochs 120 \
     > $slurm_output_iter1_g_train
 
-# Test explainer
+echo "[RUNNING] Iter 1 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter1_common_args \
     $common_args \
-    >  $slurm_output_iter1_g_test
+    > $slurm_output_iter1_g_test
 
-# Train residual
+echo "[RUNNING] Iter 1 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
@@ -164,182 +165,176 @@ python ./src/codebase/train_explainer_CUB.py \
     > $slurm_output_iter1_residual_train
 
 #---------------------------------
-# iter 2
+# Iteration 2
 #---------------------------------
 iter2_common_args='
---prev_explainer_chk_pt_folder ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1
---checkpoint-residual model_residual_best_model_epoch_1.pth.tar
 --iter 2
---cov 0.2 0.2
---lr 0.01 0.01
+--cov 0.4
+--lr 0.01
 '
 
+echo "[RUNNING] Iter 2 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter2_common_args \
     $common_args \
-    >  $slurm_output_iter2_g_train
+    --epochs 120 \
+    > $slurm_output_iter2_g_train
 
+echo "[RUNNING] Iter 2 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter2_common_args \
     $common_args \
     > $slurm_output_iter2_g_test
 
+echo "[RUNNING] Iter 2 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
     $iter2_common_args \
     $common_args \
     > $slurm_output_iter2_residual_train
 
 #---------------------------------
-# iter 3
+# Iteration 3
 #---------------------------------
 iter3_common_args='
---prev_explainer_chk_pt_folder ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2
---checkpoint-residual model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar
 --iter 3
---cov 0.2 0.2 0.2
---lr 0.01 0.01 0.01
+--cov 0.6
+--lr 0.01
 '
 
+echo "[RUNNING] Iter 3 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "explainer" \
     $iter3_common_args \
     $common_args \
+    --epochs 120 \
     > $slurm_output_iter3_g_train
 
-
+echo "[RUNNING] Iter 3 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter3_common_args \
     $common_args \
     > $slurm_output_iter3_g_test
 
-
+echo "[RUNNING] Iter 3 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
     $iter3_common_args \
     $common_args \
     > $slurm_output_iter3_residual_train
 
 #---------------------------------
-# iter 4
+# Iteration 4
 #---------------------------------
 iter4_common_args='
---prev_explainer_chk_pt_folder ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3
---checkpoint-residual model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar
 --iter 4
---cov 0.2 0.2 0.2 0.2
---lr 0.01 0.01 0.01 0.01
+--cov 0.7
+--lr 0.01
 '
+
+echo "[RUNNING] Iter 4 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "explainer" \
     $iter4_common_args \
     $common_args \
+    --epochs 120 \
     > $slurm_output_iter4_g_train
 
-
+echo "[RUNNING] Iter 4 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter4_common_args \
     $common_args \
     > $slurm_output_iter4_g_test
 
-
+echo "[RUNNING] Iter 4 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
     $iter4_common_args \
     $common_args \
     > $slurm_output_iter4_residual_train
 
-# ---------------------------------
-# iter 5
-# ---------------------------------
+#---------------------------------
+# Iteration 5
+#---------------------------------
 iter5_common_args='
---prev_explainer_chk_pt_folder ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4
---checkpoint-residual model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar
 --iter 5
---cov 0.2 0.2 0.2 0.2 0.2
---lr 0.01 0.01 0.01 0.01 0.01
+--cov 0.8
+--lr 0.01
 '
+
+echo "[RUNNING] Iter 5 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "explainer" \
     $iter5_common_args \
     $common_args \
+    --epochs 120 \
     > $slurm_output_iter5_g_train
 
-
+echo "[RUNNING] Iter 5 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter5_common_args \
     $common_args \
     > $slurm_output_iter5_g_test
 
-
+echo "[RUNNING] Iter 5 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
     $iter5_common_args \
     $common_args \
     > $slurm_output_iter5_residual_train
 
-# ---------------------------------
-# iter 6
-# ---------------------------------
+#---------------------------------
+# Iteration 6
+#---------------------------------
 iter6_common_args='
---prev_explainer_chk_pt_folder ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4 ./checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter5
---checkpoint-residual model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar model_residual_best_model_epoch_1.pth.tar
 --iter 6
---cov 0.2 0.2 0.2 0.2 0.2 0.2
---lr 0.01 0.01 0.01 0.01 0.01 0.01
+--cov 0.9
+--lr 0.01
 '
+
+echo "[RUNNING] Iter 6 Explainer Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "explainer" \
     $iter6_common_args \
     $common_args \
+    --epochs 120 \
     > $slurm_output_iter6_g_train
 
-
+echo "[RUNNING] Iter 6 Explainer Test"
 python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "explainer" \
     $iter6_common_args \
     $common_args \
     > $slurm_output_iter6_g_test
 
-
+echo "[RUNNING] Iter 6 Residual Train"
 python ./src/codebase/train_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
-    --expert-to-train "residual" \
-    $iter6_common_args \
-    $common_args \
-    > $slurm_output_iter5_residual_train
-
-
-# Train final residual
-python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
-    --checkpoint-residual "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" \
+    --checkpoint-model "model_g_best_model.pth.tar" \
     --expert-to-train "residual" \
     $iter6_common_args \
     $common_args \
     > $slurm_output_iter6_residual_train
 
-# ---------------------------------
-# Explanations
-# ---------------------------------
-# Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
-python ./src/codebase/FOLs_vision_main.py --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
+#---------------------------------
+# Final explanations
+#---------------------------------
+echo "[RUNNING] Final Explanation Generation"
+python ./src/codebase/FOLs_vision_main.py \
+    --arch "ResNet101" \
+    --dataset "cub" \
+    --iterations 6 \
+    > $slurm_explanations
