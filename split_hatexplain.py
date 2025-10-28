@@ -3,9 +3,10 @@ import os
 from collections import Counter, defaultdict
 
 # === CONFIG ===
+uniqname = os.getenv("USER")  # Adjust as needed for your environment
 INPUT_FILE = "/scratch/eecs498f25s007_class_root/eecs498f25s007_class/shared_data/group12/data/hatexplain/dataset.json"
 
-OUTPUT_BASE_DIR = "/scratch/eecs498f25s007_class_root/eecs498f25s007_class/raseidl/MLRE-REPLICATION-ICML-2023-Route-interpret-repeat/data/hatexplain"
+OUTPUT_BASE_DIR = f"/scratch/eecs498f25s007_class_root/eecs498f25s007_class/{uniqname}/MLRE-REPLICATION-ICML-2023-Route-interpret-repeat/data/hatexplain"
 
 LABEL_FOLDERS = ["offensive", "hatespeech", "normal"]
 for folder in LABEL_FOLDERS:
