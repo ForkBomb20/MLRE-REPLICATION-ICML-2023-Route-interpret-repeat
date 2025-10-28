@@ -138,7 +138,7 @@ iter1_common_args='
 --cov 0.2
 --lr 0.01
 '
-
+echo "[RUNNING] train_explainer_CUB.py (iter 1 explainer)"
 # Train explainer
 python ./src/codebase/train_explainer_CUB.py \
     --expert-to-train "explainer" \
@@ -147,6 +147,7 @@ python ./src/codebase/train_explainer_CUB.py \
     --epochs 120 \
     > $slurm_output_iter1_g_train
 
+echo "[RUNNING] test_explainer_CUB.py (iter 1 explainer)"
 # Test explainer
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" \
@@ -155,6 +156,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     >  $slurm_output_iter1_g_test
 
+echo "[RUNNING] train_explainer_CUB.py (iter 1 residual)"
 # Train residual
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" \
@@ -173,6 +175,7 @@ iter2_common_args='
 --cov 0.2 0.2
 --lr 0.01 0.01
 '
+echo "[RUNNING] train_explainer_CUB.py (iter 2 explainer)"
 
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" \
@@ -181,6 +184,7 @@ python ./src/codebase/train_explainer_CUB.py \
     $common_args \
     >  $slurm_output_iter2_g_train
 
+echo "[RUNNING] test_explainer_CUB.py (iter 2 explainer)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "explainer" \
@@ -188,6 +192,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter2_g_test
 
+echo "[RUNNING] train_explainer_CUB.py (iter 2 residual)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" \
     --expert-to-train "residual" \
@@ -205,6 +210,7 @@ iter3_common_args='
 --cov 0.2 0.2 0.2
 --lr 0.01 0.01 0.01
 '
+echo "[RUNNING] train_explainer_CUB.py (iter 3 explainer)"
 
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" \
@@ -213,7 +219,7 @@ python ./src/codebase/train_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter3_g_train
 
-
+echo "[RUNNING] test_explainer_CUB.py (iter 3 explainer)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "explainer" \
@@ -221,7 +227,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter3_g_test
 
-
+echo "[RUNNING] train_explainer_CUB.py (iter 3 residual)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "residual" \
@@ -239,6 +245,7 @@ iter4_common_args='
 --cov 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01
 '
+echo "[RUNNING] train_explainer_CUB.py (iter 4 explainer)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" \
     --expert-to-train "explainer" \
@@ -246,7 +253,7 @@ python ./src/codebase/train_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter4_g_train
 
-
+echo "[RUNNING] test_explainer_CUB.py (iter 4 explainer)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "explainer" \
@@ -254,7 +261,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter4_g_test
 
-
+echo "[RUNNING] train_explainer_CUB.py (iter 4 residual)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "residual" \
@@ -272,6 +279,7 @@ iter5_common_args='
 --cov 0.2 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01 0.01
 '
+echo "[RUNNING] train_explainer_CUB.py (iter 5 explainer)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" \
     --expert-to-train "explainer" \
@@ -279,7 +287,7 @@ python ./src/codebase/train_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter5_g_train
 
-
+echo "[RUNNING] test_explainer_CUB.py (iter 5 explainer)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "explainer" \
@@ -287,7 +295,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter5_g_test
 
-
+echo "[RUNNING] train_explainer_CUB.py (iter 5 residual)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "residual" \
@@ -305,6 +313,7 @@ iter6_common_args='
 --cov 0.2 0.2 0.2 0.2 0.2 0.2
 --lr 0.01 0.01 0.01 0.01 0.01 0.01
 '
+echo "[RUNNING] train_explainer_CUB.py (iter 6 explainer)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" \
     --expert-to-train "explainer" \
@@ -312,7 +321,7 @@ python ./src/codebase/train_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter6_g_train
 
-
+echo "[RUNNING] test_explainer_CUB.py (iter 6 explainer)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --expert-to-train "explainer" \
@@ -320,7 +329,7 @@ python ./src/codebase/test_explainer_CUB.py \
     $common_args \
     > $slurm_output_iter6_g_test
 
-
+echo "[RUNNING] train_explainer_CUB.py (iter 6 residual)"
 python ./src/codebase/train_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --expert-to-train "residual" \
@@ -330,6 +339,7 @@ python ./src/codebase/train_explainer_CUB.py \
 
 
 # Train final residual
+echo "[RUNNING] test_explainer_CUB.py (final explanations)"
 python ./src/codebase/test_explainer_CUB.py \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model_epoch_188.pth.tar" "model_g_best_model_epoch_110.pth.tar" "model_g_best_model_epoch_257.pth.tar" "model_g_best_model_epoch_345.pth.tar" "model_g_best_model_epoch_87.pth.tar" \
     --checkpoint-residual "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" "model_residual_best_model_epoch_1.pth.tar" \
@@ -342,4 +352,5 @@ python ./src/codebase/test_explainer_CUB.py \
 # Explanations
 # ---------------------------------
 # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
+echo "[RUNNING] test_explainer_CUB.py (final visual explanations)"
 python ./src/codebase/FOLs_vision_main.py --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
