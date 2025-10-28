@@ -1,13 +1,13 @@
-#HateXplain Dataset
+# HateXplain Dataset
 
-##Original Location
+## Original Location
 https://github.com/hate-alert/HateXplain/blob/master/README.md
 
-##Shared Location
+## Shared Location
 ```bash
 /scratch/eecs498f25s007_class_root/eecs498f25s007_class/shared_data/group12/data/hatexplain
 ```
-##Original Dataset Format
+## Original Dataset Format
 ```bash
 {
   "24198545_gab": {
@@ -39,13 +39,13 @@ https://github.com/hate-alert/HateXplain/blob/master/README.md
 }
 ```
 
-##Copy and process dataset to local
+## Copy and process dataset to local
 ```bash
 python split_hatexplain.py #earlier version, only split the json into 3 subfolders
 
 python download_hatexplain.py #current version, generating also txt/npy
 ```
-##Folder Structure
+## Folder Structure
 hatexplain/
 ├── 0.hatespeech/
 │   ├── 24198545.txt
@@ -62,8 +62,6 @@ hatexplain/
 ├── attributes_names.txt
 ├── original_attributes.npy
 └── attributes.npy
-
-
 
 ## Features
 - Aggregates rationales from multiple annotators
