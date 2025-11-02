@@ -11,11 +11,6 @@ from torch.nn.functional import one_hot
 # ============================================================
 
 class Dataset_hatexplain(Dataset):
-    """
-    Base dataset for HateXplain text classification.
-    Mirrors Dataset_cub, but for text data (no images).
-    """
-
     def __init__(self, dataset, attributes=None, transform=None, show_text=False):
         self.dataset = dataset  # list of (text, label)
         self.attributes = attributes
@@ -43,10 +38,6 @@ class Dataset_hatexplain(Dataset):
 # ============================================================
 
 class Dataset_hatexplain_split(Dataset):
-    """
-    Loads preprocessed HateXplain tensors (tokenized text, labels, attributes).
-    """
-
     def __init__(self, dataset_path, file_name_text, file_name_y, attribute_file_name=None):
         self.text = torch.load(os.path.join(dataset_path, file_name_text))
         self.y = torch.load(os.path.join(dataset_path, file_name_y))
@@ -77,10 +68,6 @@ class Dataset_hatexplain_split(Dataset):
 # ============================================================
 
 class Dataset_hatexplain_for_explainer(Dataset):
-    """
-    Loads raw text + tensors for explanation models.
-    """
-
     def __init__(self, dataset_path, file_name_text, file_name_y, attribute_file_name, raw_data, transform=None):
         self.raw_data = raw_data
         self.transform = transform
@@ -124,9 +111,6 @@ class HateXplainDataset(Dataset):
             ├── offensive/
             └── hatespeech/
         with splits defined in post_id_divisions.json.
-
-    Each .txt file is actually a JSON with fields:
-        post_id, label, label_name, text, tokens
     """
 
     def __init__(self, root_dir, train_transform=None, eval_transform=None, confounder_names=None):
@@ -236,10 +220,6 @@ class HateXplainDataset(Dataset):
 # ============================================================
 
 class DRODatasetFinal_HateXplain(Dataset):
-    """
-    Wrapper for DRO-based training on HateXplain.
-    """
-
     def __init__(self, dataset, process_item_fn, n_classes):
         self.dataset = dataset
         self.process_item = process_item_fn
