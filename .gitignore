@@ -13,3 +13,5 @@ log/*
 
 checkpoints/*
 slurm_outs/*
+
+.ipynb_checkpoints/
