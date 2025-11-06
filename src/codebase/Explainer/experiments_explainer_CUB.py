@@ -420,7 +420,9 @@ def save_results_selected_residual_by_pi(
                 arr_sel_indices = get_selected_idx_for_residual(
                     iteration, out_select, selection_threshold, device, pi_list
                 )
+                print("Selected Array Indices", arr_sel_indices)
                 if arr_sel_indices.size(0) > 0:
+                    print("Getting selected indices for residual")
                     residual_images = images[arr_sel_indices, :, :, :]
                     residual_concepts = concepts[arr_sel_indices, :]
                     residual_preds = residual_student_logits[arr_sel_indices, :]
@@ -449,12 +451,14 @@ def save_results_selected_residual_by_pi(
     print(f"tensor_preds_residual size: {tensor_preds_residual.size()}")
     print(f"tensor_y size: {tensor_y.size()}")
 
-    acc_residual = torch.sum(tensor_preds_residual.argmax(dim=1) == tensor_y) / tensor_y.size(0)
-    acc_bb = torch.sum(tensor_preds_bb.argmax(dim=1) == tensor_y) / tensor_y.size(0)
-    print(f"Accuracy of Residual: {acc_residual * 100} || Accuracy of BB: {acc_bb * 100}")
-
-    cov = tensor_y.size(0) / 7465
-    print(f"Scaled Accuracy of Residual (cov): {acc_residual * cov * 100} ({cov})")
+    if tensor_y.size(0) != 0:
+        acc_residual = torch.sum(tensor_preds_residual.argmax(dim=1) == tensor_y) / tensor_y.size(0)
+        acc_bb = torch.sum(tensor_preds_bb.argmax(dim=1) == tensor_y) / tensor_y.size(0)
+        print(f"Accuracy of Residual: {acc_residual * 100} || Accuracy of BB: {acc_bb * 100}")
+        cov = tensor_y.size(0) / 7465
+        print(f"Scaled Accuracy of Residual (cov): {acc_residual * cov * 100} ({cov})")
+    else:
+        print("No samples were routed to the residual.")
 
     utils.save_tensor(
         path=os.path.join(output_path, f"{mode}_tensor_images.pt"), tensor_to_save=tensor_images

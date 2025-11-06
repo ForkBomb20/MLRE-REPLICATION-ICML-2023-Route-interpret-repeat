@@ -53,14 +53,14 @@ echo "CUB-200 ResNet101"
 source ./env/bin/activate
 which python
 
-# if [ ! -d /tmp/$USER/data ]; then
-#     echo "Copying dataset to local /tmp..."
-#     mkdir -p /tmp/$USER/data
-#     rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data
-#     echo "Dataset copied to local /tmp."
-# else
-#     echo "Using cached local dataset."
-# fi
+if [ ! -d /tmp/$USER/data ]; then
+    echo "Copying dataset to local /tmp..."
+    mkdir -p /tmp/$USER/data
+    rsync -ah --info=progress2 --ignore-existing ./data/ /tmp/$USER/data
+    echo "Dataset copied to local /tmp."
+else
+    echo "Using cached local dataset."
+fi
 
 # BB model
 # BB Training scripts
