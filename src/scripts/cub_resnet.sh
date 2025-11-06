@@ -343,7 +343,6 @@ iter6_common_args='
 # Train final residual
 echo "[RUNNING] test_explainer_CUB.py (final explanations)"
 python ./src/codebase/test_explainer_CUB.py \
-    $common_args \
     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
     --checkpoint-residual "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_seq_epoch_3.pth.tar" \
     --expert-to-train "residual" \
@@ -351,6 +350,7 @@ python ./src/codebase/test_explainer_CUB.py \
     --iter 6 \
     --cov 0.2 0.2 0.2 0.2 0.2 0.2 \
     --lr 0.01 0.01 0.01 0.01 0.01 0.01 \
+    $common_args \
     # $iter6_common_args \
     > $slurm_output_iter6_residual_train
 
