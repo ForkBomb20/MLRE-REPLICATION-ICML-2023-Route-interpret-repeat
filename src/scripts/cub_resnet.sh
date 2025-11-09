@@ -308,55 +308,56 @@ common_args='
 # # ---------------------------------
 # # iter 6
 # # ---------------------------------
-iter6_common_args='
---prev_explainer_chk_pt_folder ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter5
---checkpoint-residual model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar
---iter 6
---cov 0.2 0.2 0.2 0.2 0.2 0.2
---lr 0.01 0.01 0.01 0.01 0.01 0.01
-'
-# echo "[RUNNING] train_explainer_CUB.py (iter 6 explainer)"
-# python ./src/codebase/train_explainer_CUB.py \
-#     --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
-#     --expert-to-train "explainer" \
-#     $iter6_common_args \
-#     $common_args \
-#     > $slurm_output_iter6_g_train
+# iter6_common_args='
+# --prev_explainer_chk_pt_folder ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4 ../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter5
+# --checkpoint-residual model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar model_residual_best_model.pth.tar
+# --iter 6
+# --cov 0.2 0.2 0.2 0.2 0.2 0.2
+# --lr 0.01 0.01 0.01 0.01 0.01 0.01
+# '
+# # echo "[RUNNING] train_explainer_CUB.py (iter 6 explainer)"
+# # python ./src/codebase/train_explainer_CUB.py \
+# #     --checkpoint-model "model_g_best_model.pth.tar"  "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
+# #     --expert-to-train "explainer" \
+# #     $iter6_common_args \
+# #     $common_args \
+# #     > $slurm_output_iter6_g_train
 
-# echo "[RUNNING] test_explainer_CUB.py (iter 6 explainer)"
+# # echo "[RUNNING] test_explainer_CUB.py (iter 6 explainer)"
+# # python ./src/codebase/test_explainer_CUB.py \
+# #     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
+# #     --expert-to-train "explainer" \
+# #     $iter6_common_args \
+# #     $common_args \
+# #     > $slurm_output_iter6_g_test
+
+# # echo "[RUNNING] train_explainer_CUB.py (iter 6 residual)"
+# # python ./src/codebase/train_explainer_CUB.py \
+# #     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
+# #     --expert-to-train "residual" \
+# #     $iter6_common_args \
+# #     $common_args \
+# #     > $slurm_output_iter5_residual_train
+
+
+# # Train final residual
+# echo "[RUNNING] test_explainer_CUB.py (final explanations)"
 # python ./src/codebase/test_explainer_CUB.py \
 #     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
-#     --expert-to-train "explainer" \
-#     $iter6_common_args \
-#     $common_args \
-#     > $slurm_output_iter6_g_test
-
-# echo "[RUNNING] train_explainer_CUB.py (iter 6 residual)"
-# python ./src/codebase/train_explainer_CUB.py \
-#     --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
+#     --checkpoint-residual "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_seq_epoch_3.pth.tar" \
 #     --expert-to-train "residual" \
-#     $iter6_common_args \
+#     --prev_explainer_chk_pt_folder "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter5" \
+#     --iter 6 \
+#     --cov 0.2 0.2 0.2 0.2 0.2 0.2 \
+#     --lr 0.01 0.01 0.01 0.01 0.01 0.01 \
 #     $common_args \
-#     > $slurm_output_iter5_residual_train
-
-
-# Train final residual
-echo "[RUNNING] test_explainer_CUB.py (final explanations)"
-python ./src/codebase/test_explainer_CUB.py \
-    --checkpoint-model "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" "model_g_best_model.pth.tar" \
-    --checkpoint-residual "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_residual_best_model.pth.tar" "model_seq_epoch_3.pth.tar" \
-    --expert-to-train "residual" \
-    --prev_explainer_chk_pt_folder "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter2" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter3" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter4" "../../shared_data/group12/checkpoints/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01/iter5" \
-    --iter 6 \
-    --cov 0.2 0.2 0.2 0.2 0.2 0.2 \
-    --lr 0.01 0.01 0.01 0.01 0.01 0.01 \
-    $common_args \
-    # $iter6_common_args \
-    > $slurm_output_iter6_residual_train
+#     # $iter6_common_args \
+#     > $slurm_output_iter6_residual_train
 
 # # ---------------------------------
 # # Explanations
 # # ---------------------------------
 # # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
-# echo "[RUNNING] test_explainer_CUB.py (final visual explanations)"
-# python ./src/codebase/FOLs_vision_main.py --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
+# For a given predicted label, the FOLs are going to be the same for all
+echo "[RUNNING] test_explainer_CUB.py (final visual explanations)"
+python ./src/codebase/FOLs_vision_main.py --base_path "./src" --checkpoints "../../shared_data/group12/checkpoints" --output "../../shared_data/group12/out" --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations

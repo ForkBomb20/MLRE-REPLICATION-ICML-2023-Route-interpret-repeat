@@ -2,46 +2,46 @@
   "cub_ResNet101": {
     "MoIE_paths": {
       "iter1": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_64.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       },
       "iter2": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "cov_0.2_lr_0.01",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_188.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       },
       "iter3": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "cov_0.2_lr_0.01",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_110.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       },
       "iter4": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "cov_0.2_lr_0.01",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_257.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       },
       "iter5": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "cov_0.2_lr_0.01",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_345.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       },
       "iter6": {
-        "base_path": "ResNet101/lr_0.01_epochs_500_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
+        "base_path": "ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none",
         "prev_path": "cov_0.2_lr_0.01",
         "output": "g_outputs",
         "explainer_path": "explainer",
-        "checkpoint_g": "model_g_best_model_epoch_87.pth.tar"
+        "checkpoint_g": "model_g_best_model.pth.tar"
       }
     },
     "t": {

@@ -16,14 +16,14 @@
 # Accessing Great Lakes
 ```bash
 uniqname@greatlakes.arc-ts.umich.edu
-cd /scratch/eecs498f25s00{6 or 7}_class_root/eecs498f25s00{6 or 7}_class/
+cd /scratch/eecs498f25s007_class_root/eecs498f25s007_class/
 cd uniqname
 module load python/3.13.2
 ```
 
 ## Runing on an interactive node:
 ```bash
-salloc --partition=gpu --gres=gpu:1 --time=8:00:00 --mem=64G --account=eecs498f25s00{6 or 7}_class
+salloc --partition=gpu --gres=gpu:1 --time=8:00:00 --mem=64G --account=eecs498f25s007_class
 module load python/3.13.2
 source env/bin/activate
 chmod +x ./src/scripts/transfer_to_tmp.sh
