@@ -107,6 +107,65 @@ def bar_plot():
     survey(results, category_names)
     plt.show()
 
+def plot_avg_concepts_per_class(concept_counts_all, path_to_classes, expert_id):
+    """
+    Plot average number of concepts used per class for a given expert.
+    Only show classes where at least one concept is used.
+    """
+    # Load class labels
+    class_labels = []
+    with open(path_to_classes, "r") as f:
+        for line in f:
+            line = line.strip()
+            # Split on the first dot to remove the numeric prefix
+            if '.' in line:
+                label = line.split('.', 1)[1].strip()
+            else:
+                label = line
+            class_labels.append(label)
+
+    # Load tensors for this expert
+    iteration_path = os.path.join(path, f"iter{expert_id}", "explainer", "g_outputs")
+    concept_file = os.path.join(iteration_path, "test_tensor_concepts.pt")
+    y_file = os.path.join(iteration_path, "test_tensor_y.pt")
+    
+    test_tensor_concepts = torch.load(concept_file)
+    test_tensor_y = torch.load(y_file)
+    
+    # Convert to bool (used concepts)
+    test_tensor_concepts_bool = (test_tensor_concepts > 0.5).float()
+    
+    # Compute per-sample concepts used
+    concepts_per_sample = test_tensor_concepts_bool.sum(dim=1)
+    
+    # Compute average per class and filter out zero-average classes
+    filtered_labels = []
+    filtered_avg = []
+    for cls in range(len(class_labels)):
+        idxs = (test_tensor_y == cls).nonzero(as_tuple=True)[0]
+        if len(idxs) == 0:
+            continue
+        avg = concepts_per_sample[idxs].mean().item()
+        if avg > 0:
+            filtered_labels.append(class_labels[cls])
+            filtered_avg.append(avg)
+    
+    # Plot
+    sorted_indices = np.argsort(filtered_avg)[::-1]  # indices for descending sort
+    filtered_labels = [filtered_labels[i] for i in sorted_indices]
+    filtered_avg = [filtered_avg[i] for i in sorted_indices]
+
+    fig, ax = plt.subplots(figsize=(12, max(6, 0.2*len(filtered_labels))))
+    bars = ax.barh(range(len(filtered_labels)), filtered_avg, height=0.6)
+    ax.set_yticks(range(len(filtered_labels)))
+    ax.set_yticklabels(filtered_labels)
+    ax.invert_yaxis()  # optional: first class on top
+    ax.set_xlabel("Average Number of Concepts Used")
+    ax.set_ylabel("Bird Species")
+    ax.set_title(f"Expert {expert_id}: Avg Concepts per Class")
+    plt.tight_layout()
+    plt.savefig(f"expert{expert_id}_avg_concepts_per_class.png", dpi=300)
+    plt.show()
 
 def get_device():
     return torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
@@ -167,11 +226,14 @@ if __name__ == "__main__":
     path = "/scratch/eecs498f25s007_class_root/eecs498f25s007_class/shared_data/group12/out/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/cov_0.2_lr_0.01"
     n_experts = 6
     concept_counts_all = counterfactual_concept_counts(n_experts, path)
-    for i in range(1, n_experts + 1):
-        counts = concept_counts_all[i]["counts_per_sample"]
-        avg = np.mean(counts)
-        print(f"<<<<<<< Expert : {i} >>>>>>>>")
-        print(f"Expert {i} average concepts used: {avg}")
-        print(f"Expert {i} concept counts per sample: {counts[:10]} ...") 
+    # for i in range(1, n_experts + 1):
+    #     counts = concept_counts_all[i]["counts_per_sample"]
+    #     avg = np.mean(counts)
+    #     print(f"<<<<<<< Expert : {i} >>>>>>>>")
+    #     print(f"Expert {i} average concepts used: {avg}")
+    #     print(f"Expert {i} concept counts per sample: {counts[:10]} ...") 
 
-    plot_concept_counts_boxplot(concept_counts_all)
+    #plot_concept_counts_boxplot(concept_counts_all)
+    
+    plot_avg_concepts_per_class(concept_counts_all, "src/codebase/dataset/classes.txt", expert_id=3)
+    plot_avg_concepts_per_class(concept_counts_all, "src/codebase/dataset/classes.txt", expert_id=4)
