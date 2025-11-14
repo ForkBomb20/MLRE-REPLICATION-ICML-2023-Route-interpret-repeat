@@ -424,5 +424,5 @@ python ./src/codebase/test_explainer_CUB.py \
 # # ---------------------------------
 # # Update ./src/codebase/Completeness_and_interventions/paths_MoIE.json file with appropriate paths for the checkpoints and outputs
 # For a given predicted label, the FOLs are going to be the same for all
-echo "[RUNNING] test_explainer_CUB.py (final visual explanations)"
+echo "[RUNNING] FOL_vision_main.py (final visual explanations)"
 python ./src/codebase/FOLs_vision_main.py --base_path "./src" --checkpoints "../../shared_data/group12/checkpoints" --output "../../shared_data/group12/out" --arch "ResNet101" --dataset "cub" --iterations 6  > $slurm_explanations
