@@ -1,0 +1,2 @@
+******************************************* iteration: 1 start******************************************* 
+=======>> ../../shared_data/group12/out/cub/explainer/ResNet101/lr_0.01_epochs_120_temperature-lens_0.7_use-concepts-as-pi-input_True_input-size-pi_2048_cov_0.2_alpha_0.5_selection-threshold_0.5_lambda-lens_0.0001_alpha-KD_0.9_temperature-KD_10.0_hidden-layers_1_layer_layer4_explainer_init_none/iter1/explainer/g_outputs_new
