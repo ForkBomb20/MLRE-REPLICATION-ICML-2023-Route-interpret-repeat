@@ -129,14 +129,14 @@ def test_t(args):
         args.dataset,
         "t",
         f"{root}_{args.arch}_{args.layer}_{args.flattening_type}_{args.solver_LR}_{args.loss_LR}",
-        "stats"
+        "stats_new"
     )
     output_path_t_dataset_g = os.path.join(
         args.output,
         args.dataset,
         "t",
         f"{root}_{args.arch}_{args.layer}_{args.flattening_type}_{args.solver_LR}_{args.loss_LR}",
-        "dataset_g"
+        "dataset_g_new"
     )
     chk_pt_path_t = os.path.join(
         args.checkpoints,
@@ -379,11 +379,11 @@ def predict_t(
     cls_report = {}
     for i, concept_name in enumerate(concept_names):
         cls_report[concept_name] = {}
-    for i, concept_name in enumerate(concept_names):
-        cls_report[concept_name]["accuracy"] = metrics.accuracy_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
-        cls_report[concept_name]["precision"] = metrics.precision_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
-        cls_report[concept_name]["recall"] = metrics.recall_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
-        cls_report[concept_name]["f1"] = metrics.f1_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
+    # for i, concept_name in enumerate(concept_names):
+    #     cls_report[concept_name]["accuracy"] = metrics.accuracy_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
+    #     cls_report[concept_name]["precision"] = metrics.precision_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
+    #     cls_report[concept_name]["recall"] = metrics.recall_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
+    #     cls_report[concept_name]["f1"] = metrics.f1_score(y_pred=y_pred[i], y_true=out_put_GT_np[i])
 
     cls_report["accuracy_overall"] = (y_pred == out_put_GT_np).sum() / (out_put_GT_np.shape[0] * out_put_GT_np.shape[1])
     for i, concept_name in enumerate(concept_names):
