@@ -16,6 +16,11 @@ colors = ["#E24A33", "#348ABD", "#988ED5", "#777777", "#FBC15E", "#8EBA42"]
 # Total proportional accuracy (target height)
 total_acc = 0.88
 
+# --- NEW: correct residual proportional accuracy ---
+residual_coverage = np.array([963, 739, 572, 421, 149, 2])
+accuracy_r = np.array([85.670, 84.574, 84.615, 81.948, 83.221, 100.0])
+residual = (residual_coverage / total) * (accuracy_r / 100)
+
 # Create figure
 fig, ax = plt.subplots(figsize=(8, 5))
 bottom = np.zeros(len(iterations))
@@ -26,11 +31,10 @@ for i in range(len(iterations)):
            color=colors[i], edgecolor="white", label=f"Iter {i+1}")
     bottom[i:] += prop_accuracies[i]
 
-# --- Add black residual segment ---
-residual = total_acc - bottom  # space left to fill up to dashed line
+# --- Add TRUE residual segment ---
 ax.bar(iterations, residual, bottom=bottom, color="black", edgecolor="white", label="Residual")
 
-# --- Add dashed purple line at total accuracy ---
+# --- Keep the dashed purple line ---
 ax.axhline(y=total_acc, color="purple", linestyle="--", linewidth=1.5)
 ax.text(len(iterations) - 0.8, total_acc + 0.005, f"Total = {total_acc:.2f}", color="purple")
 
