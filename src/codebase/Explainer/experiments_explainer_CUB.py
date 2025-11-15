@@ -839,8 +839,16 @@ def save_results_selected_by_pi(
     tensor_alpha = tensor_alpha.cpu()
     tensor_alpha_norm = tensor_alpha_norm.cpu()
 
-    acc_g = torch.sum(tensor_preds.argmax(dim=1) == tensor_y) / tensor_preds.size(0) * 100
-    acc_bb = torch.sum(tensor_preds_bb.argmax(dim=1) == tensor_y) / tensor_preds.size(0) * 100
+    acc_bb = None
+    acc_g = None
+    if tensor_preds.size(0) == 0:
+        print("No samples were selected by G.")
+    else:
+        acc_g = torch.sum(tensor_preds.argmax(dim=1) == tensor_y) / tensor_preds.size(0) * 100
+    if tensor_preds_bb.size(0) == 0:
+        print("No samples were selected by G, so BB accuracy is 0.")
+    else:
+        acc_bb = torch.sum(tensor_preds_bb.argmax(dim=1) == tensor_y) / tensor_preds.size(0) * 100
     print("################### Performance ###################")
     print(f"Accuracy G: {acc_g}")
     print(f"Accuracy BB: {acc_bb}")
