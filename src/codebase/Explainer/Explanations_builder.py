@@ -88,6 +88,10 @@ def build_FOLs(_dict, args):
     test_tensor_preds = _dict["test_tensor_preds"]
     test_tensor_concepts_bool = _dict["test_tensor_concepts_bool"]
 
+    if test_tensor_concepts_bool.size(0) == 0:
+        print(f"No samples were selected by G for iteration {args.cur_iter}. Skipping FOL generation.")
+        return
+
     moIE = _dict["moIE"]
     pkl = _dict["pkl"]
     device = _dict["device"]
