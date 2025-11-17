@@ -100,7 +100,7 @@ def test_glt(args):
     )
     print(root)
     dataset_path = os.path.join(
-        args.output, args.dataset, "t", args.dataset_folder_concepts, "dataset_g_new"
+        args.output, args.dataset, "t", args.dataset_folder_concepts, "dataset_g_new_large"
     )
 
     start = time.time()
@@ -611,8 +611,8 @@ def test_explainer(
             log_path_explainer, f"iter{iteration}", args.arch, f"cov_{cov}_lr_{lr_explainer}-explainer"
         )
 
-    output_path_model_outputs = os.path.join(g_output_path, "model_outputs_new")
-    output_path_g_outputs = os.path.join(g_output_path, "g_outputs_new")
+    output_path_model_outputs = os.path.join(g_output_path, "model_outputs_new_large")
+    output_path_g_outputs = os.path.join(g_output_path, "g_outputs_new_large")
 
     os.makedirs(g_output_path, exist_ok=True)
     os.makedirs(output_path_model_outputs, exist_ok=True)

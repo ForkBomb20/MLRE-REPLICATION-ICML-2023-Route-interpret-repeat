@@ -129,14 +129,14 @@ def test_t(args):
         args.dataset,
         "t",
         f"{root}_{args.arch}_{args.layer}_{args.flattening_type}_{args.solver_LR}_{args.loss_LR}",
-        "stats_new"
+        "stats_new_large"
     )
     output_path_t_dataset_g = os.path.join(
         args.output,
         args.dataset,
         "t",
         f"{root}_{args.arch}_{args.layer}_{args.flattening_type}_{args.solver_LR}_{args.loss_LR}",
-        "dataset_g_new"
+        "dataset_g_new_large"
     )
     chk_pt_path_t = os.path.join(
         args.checkpoints,

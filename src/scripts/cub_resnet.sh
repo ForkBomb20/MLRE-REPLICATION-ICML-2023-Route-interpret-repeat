@@ -101,20 +101,20 @@ fi
 #     > $slurm_output_t_train
 
 # # Test
-python ./src/codebase/test_t_CUB.py \
-    --checkpoint-file "best_model.pth.tar" \
-    --checkpoint-file-t "best_model.pth.tar" \
-    --save-concepts True \
-    --bs 16 \
-    --solver-LR "sgd" \
-    --loss-LR "BCE" \
-    --layer "layer4" \
-    --flattening-type "adaptive" \
-    --arch "ResNet101" \
-    --data-root "/tmp/$USER/data/CUB_200_2011" \
-    --checkpoints "../../shared_data/group12/checkpoints" \
-    --output "../../shared_data/group12/out" \
-    > $slurm_output_t_test
+# python ./src/codebase/test_t_CUB.py \
+#     --checkpoint-file "best_model.pth.tar" \
+#     --checkpoint-file-t "best_model.pth.tar" \
+#     --save-concepts True \
+#     --bs 16 \
+#     --solver-LR "sgd" \
+#     --loss-LR "BCE" \
+#     --layer "layer4" \
+#     --flattening-type "adaptive" \
+#     --arch "ResNet101" \
+#     --data-root "/tmp/$USER/data/CUB_200_2011" \
+#     --checkpoints "../../shared_data/group12/checkpoints" \
+#     --output "../../shared_data/group12/out" \
+#     > $slurm_output_t_test
 
 
 # MoIE Training scripts

@@ -1,4 +1,11 @@
-{"samples": [
+import torch
+import numpy as np
+import os
+
+t_path = "../../shared_data/group12/out/cub/t/lr_0.001_epochs_95_ResNet101_layer4_adaptive_sgd_BCE/dataset_g_new_large"
+
+data = np.load("./data/CUB_200_2011/attributes.npy")
+indices = [
     7,
     165,
     389,
@@ -427,4 +434,11 @@
     11735,
     11766,
     11787
-]}
+]
+data = data[indices]
+
+# Convert to float32 tensor
+attributes_tensor = torch.tensor(data, dtype=torch.float32)
+
+torch.save(attributes_tensor, os.path.join(t_path, f"test_proba_concepts.pt"))
+torch.save(attributes_tensor, os.path.join(t_path, f"test_attributes.pt"))

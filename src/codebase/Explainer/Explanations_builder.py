@@ -127,6 +127,6 @@ def build_FOLs(_dict, args):
     os.makedirs(fol_path, exist_ok=True)
     test_results_df = pd.DataFrame.from_dict(results_arr, orient='columns')
     pickle.dump(args, open(fol_path / f"configs_{args.cur_iter}.pkl", "wb"))
-    test_results_df.to_csv(fol_path / f"test_results_expert_{args.cur_iter}_new.csv")
+    test_results_df.to_csv(fol_path / f"test_results_expert_{args.cur_iter}_new_large_no_t.csv")
 
     print(f"******************* saved at: {fol_path} *******************")
